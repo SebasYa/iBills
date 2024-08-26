@@ -18,7 +18,7 @@ struct AddInvoiceView: View {
         NavigationView {
             Form {
                 TextField("Razón Social", text: $viewModel.razonSocial)
-                    .keyboardType(.default)
+                    .keyboardType(.asciiCapable)
                 
                 TextField("Numero de Factura", text: $viewModel.numeroFactura)
                     .keyboardType(.numberPad)

@@ -11,11 +11,12 @@ import Charts
 class GraphViewModel: ObservableObject {
     @Published var invoices: [Invoice] {
         didSet {
-            cacheData()
+            groupInvoicesByYear()
         }
     }
     
     @Published var selectedChartType: ChartType = .debit
+    @Published var selectedYear: String = Calendar.current.component(.year, from: Date()).description
     
     @Published var selectedDebitDate: Date? = nil
     @Published var selectedCreditDate: Date? = nil
@@ -25,6 +26,8 @@ class GraphViewModel: ObservableObject {
     @Published var selectedCreditIndex: Int? = nil
     @Published var selectedAverageIndex: Int? = nil
     
+    @Published var availableYears: [String] = []
+    
     @Published var cachedGroupedInvoices: [Date: [Invoice]] = [:]
     @Published var cachedAllDates: [Date] = []
     @Published var cachedCumulativeDebit: [Double] = []
@@ -33,18 +36,42 @@ class GraphViewModel: ObservableObject {
     
     init(invoices: [Invoice] = []) {
         self.invoices = invoices
-        cacheData()
+//        cacheData()
+        groupInvoicesByYear()
+    }
+    
+    private func groupInvoicesByYear() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy"
+        
+        let groupedByYear = Dictionary(grouping: invoices) { invoice in
+            dateFormatter.string(from: invoice.date)
+        }
+        
+        availableYears = groupedByYear.keys.sorted(by: { $0 < $1 })
+        
+        if !availableYears.isEmpty, selectedYear.isEmpty {
+            selectedYear = availableYears.first!
+        }
+        
+        cacheData(for: selectedYear)
     }
     
     func updateInvoices(invoices: [Invoice]) {
         self.invoices = invoices
     }
     
-    func cacheData() {
+    func cacheData(for year: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy"
+        
+        // Filtrar facturas por año
+        let invoicesForYear = invoices.filter({ dateFormatter.string(from: $0.date) == year })
+        
         let calendar = Calendar.current
         
         // Agrupar facturas por fecha
-        cachedGroupedInvoices = Dictionary(grouping: invoices) { invoice in
+        cachedGroupedInvoices = Dictionary(grouping: invoicesForYear) { invoice in
             calendar.startOfDay(for: invoice.date)
         }
         
@@ -68,13 +95,6 @@ class GraphViewModel: ObservableObject {
         
         // Calcular el promedio diario (diferencia entre Débito y Crédito)
         cachedDailyAverage = zip(cachedCumulativeDebit, cachedCumulativeCredit).map { $0 - $1 }
-        
-        // Debugging
-        print("Grouped Invoices: \(cachedGroupedInvoices)")
-        print("All Dates: \(cachedAllDates)")
-        print("Cumulative Debit: \(cachedCumulativeDebit)")
-        print("Cumulative Credit: \(cachedCumulativeCredit)")
-        print("Daily Average: \(cachedDailyAverage)")
     }
     
     func selectedDate(for xPosition: CGFloat, proxy: ChartProxy?, geometry: GeometryProxy?) -> Date {

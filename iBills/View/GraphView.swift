@@ -20,6 +20,17 @@ struct GraphView: View {
     var body: some View {
         NavigationView {
             VStack {
+                Picker("Select Year", selection: $viewModel.selectedYear) {
+                    ForEach(viewModel.availableYears, id: \.self) { year in
+                        Text(year).tag(year)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                .onChange(of: viewModel.selectedYear) { _, year in
+                    viewModel.cacheData(for: year)
+                }
+                
                 GraphTypeButtonsView(viewModel: viewModel)
                 
                 ScrollView {
@@ -73,7 +84,6 @@ struct GraphView: View {
         }
     }
 }
-
 
 #Preview {
     GraphView()
