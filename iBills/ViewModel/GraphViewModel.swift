@@ -43,30 +43,38 @@ class GraphViewModel: ObservableObject {
     func cacheData() {
         let calendar = Calendar.current
         
-        // Agrupar las facturas por fecha
+        // Agrupar facturas por fecha
         cachedGroupedInvoices = Dictionary(grouping: invoices) { invoice in
             calendar.startOfDay(for: invoice.date)
         }
         
-        // Ordenar todas las fechas involucradas (débito y crédito)
+        // Ordenar todas las fechas
         cachedAllDates = cachedGroupedInvoices.keys.sorted()
         
-        // Calcular los valores acumulativos de IVA Débito
+        // Calcular valores acumulados para Débito y Crédito
         cachedCumulativeDebit = cachedAllDates.map { date in
             cachedGroupedInvoices[date]?.filter { $0.isDebit }.reduce(0) { $0 + $1.iva } ?? 0
         }.reduce(into: []) { result, value in
-            result.append((result.last ?? 0) + value)
+            let cumulativeValue = (result.last ?? 0) + value
+            result.append(cumulativeValue)
         }
         
-        // Calcular los valores acumulativos de IVA Crédito
         cachedCumulativeCredit = cachedAllDates.map { date in
             cachedGroupedInvoices[date]?.filter { !$0.isDebit }.reduce(0) { $0 + $1.iva } ?? 0
         }.reduce(into: []) { result, value in
-            result.append((result.last ?? 0) + value)
+            let cumulativeValue = (result.last ?? 0) + value
+            result.append(cumulativeValue)
         }
         
-        // Calcular el promedio de IVA diario (diferencia entre débito y crédito para cada día)
+        // Calcular el promedio diario (diferencia entre Débito y Crédito)
         cachedDailyAverage = zip(cachedCumulativeDebit, cachedCumulativeCredit).map { $0 - $1 }
+        
+        // Debugging
+        print("Grouped Invoices: \(cachedGroupedInvoices)")
+        print("All Dates: \(cachedAllDates)")
+        print("Cumulative Debit: \(cachedCumulativeDebit)")
+        print("Cumulative Credit: \(cachedCumulativeCredit)")
+        print("Daily Average: \(cachedDailyAverage)")
     }
     
     func selectedDate(for xPosition: CGFloat, proxy: ChartProxy?, geometry: GeometryProxy?) -> Date {
@@ -75,15 +83,40 @@ class GraphViewModel: ObservableObject {
         return proxy.value(atX: chartXPosition) ?? Date()
     }
     
-    func handleDragGesture(value: DragGesture.Value, proxy: ChartProxy, geometry: GeometryProxy, currentSelectedDate: Binding<Date?>, currentSelectedIndex: Binding<Int?>) {
+    func handleDragGesture(value: DragGesture.Value, proxy: ChartProxy, geometry: GeometryProxy, currentSelectedDate: Binding<Date?>, currentSelectedIndex: Binding<Int?>, lastDate: Binding<Date?>) {
         let location = value.location
         let chartXPosition = location.x - geometry.frame(in: .local).origin.x
+        
+        // Obtén la fecha correspondiente a la posición actual del gesto
         let date = selectedDate(for: chartXPosition, proxy: proxy, geometry: geometry)
+        
+        // Redondea la fecha al inicio del día para la comparación
+        let calendar = Calendar.current
+        let roundedDate = calendar.startOfDay(for: date)
+        
+        // Actualiza la posición del RuleMark independientemente
         currentSelectedDate.wrappedValue = date
-        currentSelectedIndex.wrappedValue = findClosestIndex(for: date, in: cachedAllDates)
+        
+        // Solo actualiza el índice y valores mostrados si la fecha cambia a un nuevo día
+        if let lastSelectedDate = lastDate.wrappedValue {
+            let roundedLastDate = calendar.startOfDay(for: lastSelectedDate)
+            if roundedDate != roundedLastDate {
+                currentSelectedIndex.wrappedValue = findClosestIndex(for: roundedDate, in: cachedAllDates)
+                lastDate.wrappedValue = roundedDate
+            }
+        } else {
+            currentSelectedIndex.wrappedValue = findClosestIndex(for: roundedDate, in: cachedAllDates)
+            lastDate.wrappedValue = roundedDate
+        }
+    }
+    
+    func selectedDate(for xPosition: CGFloat, proxy: ChartProxy, geometry: GeometryProxy) -> Date {
+        let chartXPosition = xPosition - geometry.frame(in: .local).origin.x
+        return proxy.value(atX: chartXPosition) ?? Date()
     }
     
     func findClosestIndex(for date: Date, in dates: [Date]) -> Int? {
+        // Encuentra el índice del día más cercano
         return dates.enumerated().min(by: { abs($0.element.timeIntervalSince(date)) < abs($1.element.timeIntervalSince(date)) })?.offset
     }
 }

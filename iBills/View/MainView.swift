@@ -8,35 +8,39 @@
 import SwiftUI
 
 struct MainView: View {
-    @State private var isAuthenticated = false
-    @State private var showAuthView = true
-    @State private var authErrorMessage = ""
-    
+
+    @StateObject private var authViewModel = AuthenticationViewModel()
     
     var body: some View {
-            if isAuthenticated {
+        if authViewModel.isAuthenticated {
                 VStack {
                     TabView {
                         HomeView()
                             .tabItem {
                                 Label("Home", systemImage: "house.fill")
                             }
+                        
+                        BalanceView()
+                            .tabItem {
+                                Label("Balance", systemImage: "book.pages.fill")
+                            }
+                        
                         GraphView()
                             .tabItem {
                                 Label("Gráfico", systemImage: "chart.xyaxis.line")
                             }
                     }
                 }
-            } else if showAuthView {
+        } else if authViewModel.showAuthView {
                 // Mostrar la vista de autenticación
-                AuthenticationView(isAuthenticated: $isAuthenticated, showAuthView: $showAuthView, authErrorMessage: $authErrorMessage)
+                AuthenticationView(viewModel: authViewModel)
             } else {
                 // Mostrar un mensaje de error o una opción para abrir Configuración
                 VStack {
                     Text("Se necesita autorización para acceder a la app.")
                         .foregroundColor(.red)
-                    if !authErrorMessage.isEmpty {
-                        Text(authErrorMessage)
+                    if !authViewModel.authErrorMessage.isEmpty {
+                        Text(authViewModel.authErrorMessage)
                             .foregroundColor(.gray)
                     }
                     Button("Abrir Configuración") {
@@ -46,10 +50,10 @@ struct MainView: View {
                     }
                     .padding()
                 }
-                .onChange(of: isAuthenticated) { _, newValue in
+                .onChange(of: authViewModel.isAuthenticated) { _, newValue in
                     // Realiza cualquier acción adicional si el estado de autenticación cambia
                     if newValue {
-                        showAuthView = false
+                        authViewModel.showAuthView = false
                     }
                 }
             }

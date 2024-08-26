@@ -11,15 +11,19 @@
 		DB612D4B2C61302A006D9E8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB612D4A2C61302A006D9E8B /* Assets.xcassets */; };
 		DB612D4E2C61302A006D9E8B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB612D4D2C61302A006D9E8B /* Preview Assets.xcassets */; };
 		DB612D552C613A36006D9E8B /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D542C613A36006D9E8B /* Invoice.swift */; };
-		DB612D572C614E8F006D9E8B /* AddReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D562C614E8F006D9E8B /* AddReceiptView.swift */; };
 		DB612D592C615301006D9E8B /* AddInvoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D582C615301006D9E8B /* AddInvoiceView.swift */; };
 		DB612D5B2C615D2C006D9E8B /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D5A2C615D2C006D9E8B /* GraphView.swift */; };
 		DB612D5D2C615DAF006D9E8B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D5C2C615DAF006D9E8B /* HomeView.swift */; };
-		DB612D5F2C61622E006D9E8B /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D5E2C61622E006D9E8B /* Receipt.swift */; };
 		DB612D612C616A6C006D9E8B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D602C616A6C006D9E8B /* MainView.swift */; };
 		DB9A95792C6FD74000FE559F /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95782C6FD74000FE559F /* AuthenticationView.swift */; };
 		DB9A957E2C72809900FE559F /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A957D2C72809900FE559F /* GraphViewModel.swift */; };
 		DB9A95802C73CF6700FE559F /* ChartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A957F2C73CF6700FE559F /* ChartType.swift */; };
+		DB9A95882C77073300FE559F /* GraphTypeButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */; };
+		DB9A958A2C7707C600FE559F /* GraphSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95892C7707C600FE559F /* GraphSectionView.swift */; };
+		DB9A958C2C770AFF00FE559F /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958B2C770AFF00FE559F /* AuthenticationViewModel.swift */; };
+		DB9A958E2C770C7900FE559F /* AddInvoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */; };
+		DB9A95902C79AF7B00FE559F /* BalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958F2C79AF7B00FE559F /* BalanceView.swift */; };
+		DB9A95922C79AF9300FE559F /* BalanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,15 +32,19 @@
 		DB612D4A2C61302A006D9E8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB612D4D2C61302A006D9E8B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DB612D542C613A36006D9E8B /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
-		DB612D562C614E8F006D9E8B /* AddReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptView.swift; sourceTree = "<group>"; };
 		DB612D582C615301006D9E8B /* AddInvoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInvoiceView.swift; sourceTree = "<group>"; };
 		DB612D5A2C615D2C006D9E8B /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		DB612D5C2C615DAF006D9E8B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		DB612D5E2C61622E006D9E8B /* Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		DB612D602C616A6C006D9E8B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		DB9A95782C6FD74000FE559F /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		DB9A957D2C72809900FE559F /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
 		DB9A957F2C73CF6700FE559F /* ChartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartType.swift; sourceTree = "<group>"; };
+		DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTypeButtonsView.swift; sourceTree = "<group>"; };
+		DB9A95892C7707C600FE559F /* GraphSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSectionView.swift; sourceTree = "<group>"; };
+		DB9A958B2C770AFF00FE559F /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInvoiceViewModel.swift; sourceTree = "<group>"; };
+		DB9A958F2C79AF7B00FE559F /* BalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceView.swift; sourceTree = "<group>"; };
+		DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +98,10 @@
 		DB9A957A2C70840100FE559F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				DB9A958B2C770AFF00FE559F /* AuthenticationViewModel.swift */,
+				DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */,
 				DB9A957D2C72809900FE559F /* GraphViewModel.swift */,
+				DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -101,9 +112,11 @@
 				DB612D602C616A6C006D9E8B /* MainView.swift */,
 				DB9A95782C6FD74000FE559F /* AuthenticationView.swift */,
 				DB612D5C2C615DAF006D9E8B /* HomeView.swift */,
+				DB9A958F2C79AF7B00FE559F /* BalanceView.swift */,
 				DB612D5A2C615D2C006D9E8B /* GraphView.swift */,
+				DB9A95892C7707C600FE559F /* GraphSectionView.swift */,
+				DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */,
 				DB612D582C615301006D9E8B /* AddInvoiceView.swift */,
-				DB612D562C614E8F006D9E8B /* AddReceiptView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -112,7 +125,6 @@
 			isa = PBXGroup;
 			children = (
 				DB612D542C613A36006D9E8B /* Invoice.swift */,
-				DB612D5E2C61622E006D9E8B /* Receipt.swift */,
 				DB9A957F2C73CF6700FE559F /* ChartType.swift */,
 			);
 			path = Model;
@@ -190,15 +202,19 @@
 			files = (
 				DB612D5B2C615D2C006D9E8B /* GraphView.swift in Sources */,
 				DB612D612C616A6C006D9E8B /* MainView.swift in Sources */,
+				DB9A958C2C770AFF00FE559F /* AuthenticationViewModel.swift in Sources */,
 				DB612D592C615301006D9E8B /* AddInvoiceView.swift in Sources */,
 				DB612D552C613A36006D9E8B /* Invoice.swift in Sources */,
-				DB612D5F2C61622E006D9E8B /* Receipt.swift in Sources */,
+				DB9A958E2C770C7900FE559F /* AddInvoiceViewModel.swift in Sources */,
 				DB9A957E2C72809900FE559F /* GraphViewModel.swift in Sources */,
 				DB9A95792C6FD74000FE559F /* AuthenticationView.swift in Sources */,
+				DB9A95882C77073300FE559F /* GraphTypeButtonsView.swift in Sources */,
+				DB9A958A2C7707C600FE559F /* GraphSectionView.swift in Sources */,
 				DB612D472C613028006D9E8B /* iBillsApp.swift in Sources */,
 				DB9A95802C73CF6700FE559F /* ChartType.swift in Sources */,
-				DB612D572C614E8F006D9E8B /* AddReceiptView.swift in Sources */,
 				DB612D5D2C615DAF006D9E8B /* HomeView.swift in Sources */,
+				DB9A95922C79AF9300FE559F /* BalanceViewModel.swift in Sources */,
+				DB9A95902C79AF7B00FE559F /* BalanceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,8 +355,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -348,6 +364,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SebastianYanni.iBills;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -369,8 +389,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -378,6 +398,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SebastianYanni.iBills;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
