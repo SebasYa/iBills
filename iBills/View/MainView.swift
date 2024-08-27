@@ -13,24 +13,11 @@ struct MainView: View {
     
     var body: some View {
         if authViewModel.isAuthenticated {
+            ZStack {
                 VStack {
-                    TabView {
-                        HomeView()
-                            .tabItem {
-                                Label("Home", systemImage: "house.fill")
-                            }
-                        
-                        BalanceView()
-                            .tabItem {
-                                Label("Balance", systemImage: "book.pages.fill")
-                            }
-                        
-                        GraphView()
-                            .tabItem {
-                                Label("Gráfico", systemImage: "chart.xyaxis.line")
-                            }
-                    }
+                    ContentView()
                 }
+            }
         } else if authViewModel.showAuthView {
                 // Show Auth verification
                 AuthenticationView(viewModel: authViewModel)

@@ -112,7 +112,6 @@ struct HomeView: View {
                                             }
                                             .padding()
                                             .cornerRadius(10)
-                                            .shadow(radius: 1)
                                         }
                                         // Enable deleting invoices from the group
                                         .onDelete { indexSet in

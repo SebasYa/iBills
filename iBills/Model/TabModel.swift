@@ -19,8 +19,8 @@ enum TabModel: String, CaseIterable {
         case .balance:
             "Balance"
         case .graficos:
-            "Graficos"
-        }
+            "Gráficos"
         }
     }
 }
+

@@ -27,16 +27,8 @@ struct GraphView: View {
                 )
                 .edgesIgnoringSafeArea(.all)
                 VStack {
-                    Picker("Select Year", selection: $viewModel.selectedYear) {
-                        ForEach(viewModel.availableYears, id: \.self) { year in
-                            Text(year).tag(year)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding()
-                    .onChange(of: viewModel.selectedYear) { _, year in
-                        viewModel.cacheData(for: year)
-                    }
+                    
+                    YearPickerView(viewModel: viewModel)
                     
                     GraphTypeButtonsView(viewModel: viewModel)
                     

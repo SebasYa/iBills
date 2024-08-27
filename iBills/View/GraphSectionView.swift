@@ -86,6 +86,10 @@ let dateFormatter: DateFormatter = {
 
 #Preview {
     // Ejemplo de datos para la vista previa
+    @Previewable @State var selectedIndex: Int? = nil
+    // Ejemplo de datos para la vista previa
+    @Previewable @State var selectedDate: Date? = nil
+    // Ejemplo de datos para la vista previa
     let exampleDates = [
         Date(),
         Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
@@ -93,9 +97,6 @@ let dateFormatter: DateFormatter = {
     ]
     
     let exampleData = [100.0, 200.0, 150.0]
-    
-    @State var selectedDate: Date? = nil
-    @State var selectedIndex: Int? = nil
     
     return GraphSectionView(
         selectedDate: $selectedDate,

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DB140B1E2C7E6AB10020138E /* YearPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB140B1D2C7E6AB10020138E /* YearPickerView.swift */; };
+		DB4B2A5D2C7E54F600530EE7 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B2A5C2C7E54F600530EE7 /* CustomTabBarView.swift */; };
 		DB612D472C613028006D9E8B /* iBillsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D462C613028006D9E8B /* iBillsApp.swift */; };
 		DB612D4B2C61302A006D9E8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB612D4A2C61302A006D9E8B /* Assets.xcassets */; };
 		DB612D4E2C61302A006D9E8B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB612D4D2C61302A006D9E8B /* Preview Assets.xcassets */; };
@@ -25,10 +27,14 @@
 		DB9A95902C79AF7B00FE559F /* BalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958F2C79AF7B00FE559F /* BalanceView.swift */; };
 		DB9A95922C79AF9300FE559F /* BalanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */; };
 		DB9A95942C7E467A00FE559F /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95932C7E467A00FE559F /* TabModel.swift */; };
-		DB9A95962C7E471100FE559F /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95952C7E471100FE559F /* CustomTabBar.swift */; };
+		DB9A95962C7E471100FE559F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95952C7E471100FE559F /* ContentView.swift */; };
+		DBA266422C7E750700CEAD51 /* YearButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA266412C7E750700CEAD51 /* YearButtonsView.swift */; };
+		DBA266442C7E778700CEAD51 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DBA266432C7E778700CEAD51 /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DB140B1D2C7E6AB10020138E /* YearPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearPickerView.swift; sourceTree = "<group>"; };
+		DB4B2A5C2C7E54F600530EE7 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		DB612D432C613028006D9E8B /* iBills.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iBills.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB612D462C613028006D9E8B /* iBillsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iBillsApp.swift; sourceTree = "<group>"; };
 		DB612D4A2C61302A006D9E8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -48,7 +54,9 @@
 		DB9A958F2C79AF7B00FE559F /* BalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceView.swift; sourceTree = "<group>"; };
 		DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceViewModel.swift; sourceTree = "<group>"; };
 		DB9A95932C7E467A00FE559F /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
-		DB9A95952C7E471100FE559F /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		DB9A95952C7E471100FE559F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DBA266412C7E750700CEAD51 /* YearButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearButtonsView.swift; sourceTree = "<group>"; };
+		DBA266432C7E778700CEAD51 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				DB612D462C613028006D9E8B /* iBillsApp.swift */,
+				DBA266432C7E778700CEAD51 /* Launch Screen.storyboard */,
 				DB9A957C2C70841400FE559F /* Model */,
 				DB9A957B2C70840D00FE559F /* View */,
 				DB9A957A2C70840100FE559F /* ViewModel */,
@@ -114,14 +123,17 @@
 			isa = PBXGroup;
 			children = (
 				DB612D602C616A6C006D9E8B /* MainView.swift */,
+				DB9A95952C7E471100FE559F /* ContentView.swift */,
 				DB9A95782C6FD74000FE559F /* AuthenticationView.swift */,
 				DB612D5C2C615DAF006D9E8B /* HomeView.swift */,
 				DB9A958F2C79AF7B00FE559F /* BalanceView.swift */,
+				DBA266412C7E750700CEAD51 /* YearButtonsView.swift */,
 				DB612D5A2C615D2C006D9E8B /* GraphView.swift */,
+				DB140B1D2C7E6AB10020138E /* YearPickerView.swift */,
 				DB9A95892C7707C600FE559F /* GraphSectionView.swift */,
 				DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */,
 				DB612D582C615301006D9E8B /* AddInvoiceView.swift */,
-				DB9A95952C7E471100FE559F /* CustomTabBar.swift */,
+				DB4B2A5C2C7E54F600530EE7 /* CustomTabBarView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -194,6 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBA266442C7E778700CEAD51 /* Launch Screen.storyboard in Resources */,
 				DB612D4E2C61302A006D9E8B /* Preview Assets.xcassets in Resources */,
 				DB612D4B2C61302A006D9E8B /* Assets.xcassets in Resources */,
 			);
@@ -213,8 +226,11 @@
 				DB612D592C615301006D9E8B /* AddInvoiceView.swift in Sources */,
 				DB612D552C613A36006D9E8B /* Invoice.swift in Sources */,
 				DB9A958E2C770C7900FE559F /* AddInvoiceViewModel.swift in Sources */,
+				DBA266422C7E750700CEAD51 /* YearButtonsView.swift in Sources */,
 				DB9A957E2C72809900FE559F /* GraphViewModel.swift in Sources */,
-				DB9A95962C7E471100FE559F /* CustomTabBar.swift in Sources */,
+				DB9A95962C7E471100FE559F /* ContentView.swift in Sources */,
+				DB140B1E2C7E6AB10020138E /* YearPickerView.swift in Sources */,
+				DB4B2A5D2C7E54F600530EE7 /* CustomTabBarView.swift in Sources */,
 				DB9A95792C6FD74000FE559F /* AuthenticationView.swift in Sources */,
 				DB9A95882C77073300FE559F /* GraphTypeButtonsView.swift in Sources */,
 				DB9A958A2C7707C600FE559F /* GraphSectionView.swift in Sources */,
@@ -363,6 +379,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -397,6 +414,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
