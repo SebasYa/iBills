@@ -16,15 +16,7 @@ struct GraphTypeButtonsView: View {
                 Text("Débito")
                     .padding()
                     .background(viewModel.selectedChartType == .debit ? Color.blue : Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            
-            Button(action: { viewModel.selectedChartType = .credit }) {
-                Text("Crédito")
-                    .padding()
-                    .background(viewModel.selectedChartType == .credit ? Color.blue : Color.gray)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .cornerRadius(8)
             }
             
@@ -32,9 +24,18 @@ struct GraphTypeButtonsView: View {
                 Text("Diferencia")
                     .padding()
                     .background(viewModel.selectedChartType == .difference ? Color.blue : Color.gray)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .cornerRadius(8)
             }
+            
+            Button(action: { viewModel.selectedChartType = .credit }) {
+                Text("Crédito")
+                    .padding()
+                    .background(viewModel.selectedChartType == .credit ? Color.blue : Color.gray)
+                    .foregroundStyle(.white)
+                    .cornerRadius(8)
+            }
+            
         }
         .padding()
     }

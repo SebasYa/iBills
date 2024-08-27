@@ -26,6 +26,7 @@ class AddInvoiceViewModel: ObservableObject {
         self.context = context
     }
     
+    // Adds a new invoice and saves it to the context
     func addInvoice() {
         guard let context = context else {
             errorMessage = "El contexto no está disponible."
@@ -45,7 +46,7 @@ class AddInvoiceViewModel: ObservableObject {
             return
         }
 
-        // Creación de la factura
+        // Create the invoice
         let invoice = Invoice(
             amount: amountValue,
             vatRate: selectedVAT,
@@ -78,6 +79,7 @@ class AddInvoiceViewModel: ObservableObject {
         }
     }
     
+    // Clear the form fields
     private func clearForm() {
         amount = ""
         razonSocial = ""

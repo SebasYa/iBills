@@ -32,10 +32,10 @@ struct MainView: View {
                     }
                 }
         } else if authViewModel.showAuthView {
-                // Mostrar la vista de autenticación
+                // Show Auth verification
                 AuthenticationView(viewModel: authViewModel)
             } else {
-                // Mostrar un mensaje de error o una opción para abrir Configuración
+                // "Show error message"
                 VStack {
                     Text("Se necesita autorización para acceder a la app.")
                         .foregroundColor(.red)
@@ -51,7 +51,7 @@ struct MainView: View {
                     .padding()
                 }
                 .onChange(of: authViewModel.isAuthenticated) { _, newValue in
-                    // Realiza cualquier acción adicional si el estado de autenticación cambia
+                    // Perform any additional actions if the authentication state changes
                     if newValue {
                         authViewModel.showAuthView = false
                     }

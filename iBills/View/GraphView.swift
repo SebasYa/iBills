@@ -19,67 +19,79 @@ struct GraphView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                Picker("Select Year", selection: $viewModel.selectedYear) {
-                    ForEach(viewModel.availableYears, id: \.self) { year in
-                        Text(year).tag(year)
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.green.opacity(0.5), Color.brown.opacity(0.2)]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
+                VStack {
+                    Picker("Select Year", selection: $viewModel.selectedYear) {
+                        ForEach(viewModel.availableYears, id: \.self) { year in
+                            Text(year).tag(year)
+                        }
                     }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                .onChange(of: viewModel.selectedYear) { _, year in
-                    viewModel.cacheData(for: year)
-                }
-                
-                GraphTypeButtonsView(viewModel: viewModel)
-                
-                ScrollView {
-                    if viewModel.cachedAllDates.isEmpty {
-                        Text("No hay datos disponibles")
-                            .foregroundColor(.gray)
-                            .padding()
-                    } else {
-                        VStack {
-                            switch viewModel.selectedChartType {
-                            case .debit:
-                                GraphSectionView(
-                                    selectedDate: $viewModel.selectedDebitDate,
-                                    selectedIndex: $viewModel.selectedDebitIndex,
-                                    title: "IVA Débito",
-                                    data: viewModel.cachedCumulativeDebit,
-                                    dates: viewModel.cachedAllDates,
-                                    color: Color.green,
-                                    viewModel: viewModel
-                                )
-                            case .credit:
-                                GraphSectionView(
-                                    selectedDate: $viewModel.selectedCreditDate,
-                                    selectedIndex: $viewModel.selectedCreditIndex,
-                                    title: "IVA Crédito",
-                                    data: viewModel.cachedCumulativeCredit,
-                                    dates: viewModel.cachedAllDates,
-                                    color: Color.red,
-                                    viewModel: viewModel
-                                )
-                            case .difference:
-                                GraphSectionView(
-                                    selectedDate: $viewModel.selectedAverageDate,
-                                    selectedIndex: $viewModel.selectedAverageIndex,
-                                    title: "Balance IVA",
-                                    data: viewModel.cachedDailyAverage,
-                                    dates: viewModel.cachedAllDates,
-                                    color: viewModel.cachedDailyAverage.first ?? 0 >= 0 ? .green : .red,
-                                    viewModel: viewModel
-                                )
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding()
+                    .onChange(of: viewModel.selectedYear) { _, year in
+                        viewModel.cacheData(for: year)
+                    }
+                    
+                    GraphTypeButtonsView(viewModel: viewModel)
+                    
+                    ScrollView {
+                        // Display a message if no data is available
+                        if viewModel.cachedAllDates.isEmpty {
+                            Text("No hay datos disponibles")
+                                .foregroundColor(.gray)
+                                .padding()
+                        } else {
+                            // Stack to display different graph sections based on the selected chart type
+                            VStack {
+                                switch viewModel.selectedChartType {
+                                    
+                                case .debit:
+                                    GraphSectionView(
+                                        selectedDate: $viewModel.selectedDebitDate,
+                                        selectedIndex: $viewModel.selectedDebitIndex,
+                                        title: "IVA Débito",
+                                        data: viewModel.cachedCumulativeDebit,
+                                        dates: viewModel.cachedAllDates,
+                                        color: Color.green,
+                                        viewModel: viewModel
+                                    )
+                                    
+                                case .difference:
+                                    GraphSectionView(
+                                        selectedDate: $viewModel.selectedAverageDate,
+                                        selectedIndex: $viewModel.selectedAverageIndex,
+                                        title: "Balance IVA",
+                                        data: viewModel.cachedDailyAverage,
+                                        dates: viewModel.cachedAllDates,
+                                        color: Color.indigo,
+                                        viewModel: viewModel
+                                    )
+                                case .credit:
+                                    GraphSectionView(
+                                        selectedDate: $viewModel.selectedCreditDate,
+                                        selectedIndex: $viewModel.selectedCreditIndex,
+                                        title: "IVA Crédito",
+                                        data: viewModel.cachedCumulativeCredit,
+                                        dates: viewModel.cachedAllDates,
+                                        color: Color.red,
+                                        viewModel: viewModel
+                                    )
+                                }
                             }
                         }
                     }
                 }
+                .padding()
+                .navigationTitle("Gráficos de IVA")
+                .onAppear {
+                    viewModel.updateInvoices(invoices: invoices)
             }
-            .padding()
-            .navigationTitle("Gráficos de IVA")
-            .onAppear {
-                viewModel.updateInvoices(invoices: invoices)
             }
         }
     }

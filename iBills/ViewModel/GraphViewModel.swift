@@ -36,10 +36,10 @@ class GraphViewModel: ObservableObject {
     
     init(invoices: [Invoice] = []) {
         self.invoices = invoices
-//        cacheData()
         groupInvoicesByYear()
     }
     
+    // Groups invoices by year and updates available years
     private func groupInvoicesByYear() {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy"
@@ -57,20 +57,22 @@ class GraphViewModel: ObservableObject {
         cacheData(for: selectedYear)
     }
     
+    // Updates invoices and re-caches data
     func updateInvoices(invoices: [Invoice]) {
         self.invoices = invoices
     }
     
+    // Caches data for the selected year, including grouped invoices and calculated values
     func cacheData(for year: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy"
         
-        // Filtrar facturas por año
+        // Group invoices by date
         let invoicesForYear = invoices.filter({ dateFormatter.string(from: $0.date) == year })
         
         let calendar = Calendar.current
         
-        // Agrupar facturas por fecha
+        // Sort all dates
         cachedGroupedInvoices = Dictionary(grouping: invoicesForYear) { invoice in
             calendar.startOfDay(for: invoice.date)
         }
@@ -78,7 +80,7 @@ class GraphViewModel: ObservableObject {
         // Ordenar todas las fechas
         cachedAllDates = cachedGroupedInvoices.keys.sorted()
         
-        // Calcular valores acumulados para Débito y Crédito
+        // Calculate cumulative values for Debit and Credit
         cachedCumulativeDebit = cachedAllDates.map { date in
             cachedGroupedInvoices[date]?.filter { $0.isDebit }.reduce(0) { $0 + $1.iva } ?? 0
         }.reduce(into: []) { result, value in
@@ -93,31 +95,33 @@ class GraphViewModel: ObservableObject {
             result.append(cumulativeValue)
         }
         
-        // Calcular el promedio diario (diferencia entre Débito y Crédito)
+        // Calculate daily average (difference between Debit and Credit)
         cachedDailyAverage = zip(cachedCumulativeDebit, cachedCumulativeCredit).map { $0 - $1 }
     }
     
+    // Determines the selected date based on x position in the chart
     func selectedDate(for xPosition: CGFloat, proxy: ChartProxy?, geometry: GeometryProxy?) -> Date {
         guard let proxy = proxy, let geometry = geometry else { return Date() }
         let chartXPosition = xPosition - geometry.frame(in: .local).origin.x
         return proxy.value(atX: chartXPosition) ?? Date()
     }
-    
+
+    // Handles drag gestures for updating chart indicators
     func handleDragGesture(value: DragGesture.Value, proxy: ChartProxy, geometry: GeometryProxy, currentSelectedDate: Binding<Date?>, currentSelectedIndex: Binding<Int?>, lastDate: Binding<Date?>) {
         let location = value.location
         let chartXPosition = location.x - geometry.frame(in: .local).origin.x
         
-        // Obtén la fecha correspondiente a la posición actual del gesto
+        // Get the date corresponding to the current drag gesture position
         let date = selectedDate(for: chartXPosition, proxy: proxy, geometry: geometry)
         
-        // Redondea la fecha al inicio del día para la comparación
+        // Normalize the date to the start of the day for comparison
         let calendar = Calendar.current
         let roundedDate = calendar.startOfDay(for: date)
         
-        // Actualiza la posición del RuleMark independientemente
+        // Update the position of the RuleMark independently
         currentSelectedDate.wrappedValue = date
         
-        // Solo actualiza el índice y valores mostrados si la fecha cambia a un nuevo día
+        // Only update index and values if the date changes to a new day
         if let lastSelectedDate = lastDate.wrappedValue {
             let roundedLastDate = calendar.startOfDay(for: lastSelectedDate)
             if roundedDate != roundedLastDate {
@@ -135,6 +139,7 @@ class GraphViewModel: ObservableObject {
         return proxy.value(atX: chartXPosition) ?? Date()
     }
     
+    // Finds the closest index for a given date in a list of dates
     func findClosestIndex(for date: Date, in dates: [Date]) -> Int? {
         // Encuentra el índice del día más cercano
         return dates.enumerated().min(by: { abs($0.element.timeIntervalSince(date)) < abs($1.element.timeIntervalSince(date)) })?.offset

@@ -24,6 +24,8 @@
 		DB9A958E2C770C7900FE559F /* AddInvoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */; };
 		DB9A95902C79AF7B00FE559F /* BalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958F2C79AF7B00FE559F /* BalanceView.swift */; };
 		DB9A95922C79AF9300FE559F /* BalanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */; };
+		DB9A95942C7E467A00FE559F /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95932C7E467A00FE559F /* TabModel.swift */; };
+		DB9A95962C7E471100FE559F /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95952C7E471100FE559F /* CustomTabBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInvoiceViewModel.swift; sourceTree = "<group>"; };
 		DB9A958F2C79AF7B00FE559F /* BalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceView.swift; sourceTree = "<group>"; };
 		DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceViewModel.swift; sourceTree = "<group>"; };
+		DB9A95932C7E467A00FE559F /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
+		DB9A95952C7E471100FE559F /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,7 @@
 				DB9A95892C7707C600FE559F /* GraphSectionView.swift */,
 				DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */,
 				DB612D582C615301006D9E8B /* AddInvoiceView.swift */,
+				DB9A95952C7E471100FE559F /* CustomTabBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -126,6 +131,7 @@
 			children = (
 				DB612D542C613A36006D9E8B /* Invoice.swift */,
 				DB9A957F2C73CF6700FE559F /* ChartType.swift */,
+				DB9A95932C7E467A00FE559F /* TabModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -201,12 +207,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB612D5B2C615D2C006D9E8B /* GraphView.swift in Sources */,
+				DB9A95942C7E467A00FE559F /* TabModel.swift in Sources */,
 				DB612D612C616A6C006D9E8B /* MainView.swift in Sources */,
 				DB9A958C2C770AFF00FE559F /* AuthenticationViewModel.swift in Sources */,
 				DB612D592C615301006D9E8B /* AddInvoiceView.swift in Sources */,
 				DB612D552C613A36006D9E8B /* Invoice.swift in Sources */,
 				DB9A958E2C770C7900FE559F /* AddInvoiceViewModel.swift in Sources */,
 				DB9A957E2C72809900FE559F /* GraphViewModel.swift in Sources */,
+				DB9A95962C7E471100FE559F /* CustomTabBar.swift in Sources */,
 				DB9A95792C6FD74000FE559F /* AuthenticationView.swift in Sources */,
 				DB9A95882C77073300FE559F /* GraphTypeButtonsView.swift in Sources */,
 				DB9A958A2C7707C600FE559F /* GraphSectionView.swift in Sources */,

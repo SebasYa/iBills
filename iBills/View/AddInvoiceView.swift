@@ -16,56 +16,70 @@ struct AddInvoiceView: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                TextField("Razón Social", text: $viewModel.razonSocial)
-                    .keyboardType(.asciiCapable)
-                
-                TextField("Numero de Factura", text: $viewModel.numeroFactura)
-                    .keyboardType(.numberPad)
-                    .focused($invoiceNumberFocused)
-
-                TextField("Monto Total", text: $viewModel.amount)
-                    .keyboardType(.decimalPad)
-                    .focused($amountIsFocused)
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [ Color.brown.opacity(0.2), Color.brown]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
+                Form {
+                    TextField("Razón Social", text: $viewModel.razonSocial)
+                        .keyboardType(.asciiCapable)
                     
-                
-                DatePicker("Fecha", selection: $viewModel.selectedDate, displayedComponents: .date)
-                
-                Picker("Porcentaje de IVA", selection: $viewModel.selectedVAT) {
-                    Text("27%").tag(27.0)
-                    Text("21%").tag(21.0)
-                    Text("10,5%").tag(10.5)
+                    TextField("Numero de Factura", text: $viewModel.numeroFactura)
+                        .keyboardType(.numberPad)
+                        .focused($invoiceNumberFocused)
+
+                    TextField("Monto Total", text: $viewModel.amount)
+                        .keyboardType(.decimalPad)
+                        .focused($amountIsFocused)
+                        
+                    
+                    DatePicker("Fecha", selection: $viewModel.selectedDate, displayedComponents: .date)
+                    
+                    Picker("Porcentaje de IVA", selection: $viewModel.selectedVAT) {
+                        Text("27%").tag(27.0)
+                        Text("21%").tag(21.0)
+                        Text("10,5%").tag(10.5)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                    Toggle(isOn: $viewModel.isDebit) {
+                        Text(viewModel.isDebit ? "I.V.A Débito" : "I.V.A Crédito")
+                    }
+                    
+
+                    Button(action: {
+                        DispatchQueue.main.async {
+                            viewModel.addInvoice()
+                        }
+                    }) {
+                        Label("Agregar Factura", systemImage: "folder.fill.badge.plus")
+                        }
                 }
-                .pickerStyle(SegmentedPickerStyle())
-                
-                Toggle(isOn: $viewModel.isDebit) {
-                    Text(viewModel.isDebit ? "I.V.A Débito" : "I.V.A Crédito")
-                }
-                
-                Button("Agregar Factura") {
-                    DispatchQueue.main.async {
-                        viewModel.addInvoice()
+                .listRowBackground(Color.clear)
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
+                .navigationTitle("Agregar Factura")
+                .toolbar {
+                    if invoiceNumberFocused || amountIsFocused{
+                        Button("Done") {
+                            invoiceNumberFocused = false
+                            amountIsFocused = false
+                        }
                     }
                 }
-            }
-            
-            .navigationTitle("Agregar Factura")
-            .toolbar {
-                if invoiceNumberFocused || amountIsFocused{
-                    Button("Done") {
-                        invoiceNumberFocused = false
-                        amountIsFocused = false
-                    }
+                // Show an alert if there is an error when adding the invoice
+                .alert(isPresented: $viewModel.showErrorAlert) {
+                    Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? "Ocurrió un error inesperado."), dismissButton: .default(Text("OK")))
                 }
+                .alert(isPresented: $viewModel.showSuccessAlert) {
+                    Alert(title: Text("Factura Agregada"), message: Text(viewModel.successMessage ?? "La factura se agregó exitosamente."), dismissButton: .default(Text("OK")))
+                }
+                .onAppear {
+                    viewModel.setContext(context)
             }
-            .alert(isPresented: $viewModel.showErrorAlert) {
-                Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? "Ocurrió un error inesperado."), dismissButton: .default(Text("OK")))
-            }
-            .alert(isPresented: $viewModel.showSuccessAlert) {
-                Alert(title: Text("Factura Agregada"), message: Text(viewModel.successMessage ?? "La factura se agregó exitosamente."), dismissButton: .default(Text("OK")))
-            }
-            .onAppear {
-                viewModel.setContext(context)
             }
         }
     }

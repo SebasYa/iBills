@@ -17,6 +17,7 @@ class AuthenticationViewModel: ObservableObject {
     private var context = LAContext()
     private let maxFailedAttempts = 1
     
+    // Function to handle biometric authentication
     func authenticate() {
         let reason = "Por favor, autentícate para acceder a la app."
         
@@ -38,6 +39,7 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
+    // Function to handle passcode authentication
     private func authenticateWithPasscode() {
         let reason = "Face ID falló. Ingresa tu código de acceso para continuar."
         

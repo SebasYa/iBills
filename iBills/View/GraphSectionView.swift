@@ -32,7 +32,7 @@ struct GraphSectionView: View {
                 .shadow(radius: 5)
                 .padding(.bottom, 5)
             }
-            
+            // Chart displaying the data as a line graph
             Chart {
                 ForEach(0..<dates.count, id: \.self) { index in
                     if data[index] != 0 {
@@ -52,15 +52,18 @@ struct GraphSectionView: View {
                         .foregroundStyle(.red)
                 }
             }
+            // Overlay to handle drag gestures for interacting with the chart
             .chartOverlay { proxy in
                 GeometryReader { geometry in
                     Rectangle().fill(Color.clear).contentShape(Rectangle())
                         .gesture(
                             DragGesture(minimumDistance: 0)
                                 .onChanged { value in
+                                    // Handle the drag gesture to update the selected date and index
                                     viewModel.handleDragGesture(value: value, proxy: proxy, geometry: geometry, currentSelectedDate: $selectedDate, currentSelectedIndex: $selectedIndex, lastDate: $lastDate)
                                 }
                                 .onEnded { _ in
+                                    // Reset selections when the drag ends
                                     selectedDate = nil
                                     selectedIndex = nil
                                     lastDate = nil
