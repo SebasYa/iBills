@@ -16,6 +16,13 @@ struct HomeView: View {
     @State private var showAddBill = false
     @State private var searchText = ""
     
+    @State private var showDeleteAlert = false
+    @State private var yearToDelete: String?
+
+    // State variables to manage year deletion mode and swipe animation
+    @State private var isDeleteMode = false
+    @State private var isAnimatingSwipe = false
+    
     // Computed property to filter invoices based on the search text
     var filteredInvoices: [Invoice] {
         if searchText.isEmpty {
@@ -37,6 +44,31 @@ struct HomeView: View {
         }
     }
 
+    // Function to delete all invoices from a specific year
+        private func deleteInvoices(from year: String) {
+            guard let invoicesToDelete = groupedInvoices[year] else { return }
+            for invoice in invoicesToDelete {
+                context.delete(invoice)
+            }
+            do {
+                try context.save()
+            } catch {
+                print("Error al guardar el contexto: \(error.localizedDescription)")
+            }
+        }
+    
+    // Function to trigger the swipe animation for year deletion
+    private func triggerSwipeAnimation() {
+        withAnimation {
+            isAnimatingSwipe = true
+        }
+        // Automatically reset the animation after a short delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            withAnimation {
+                isAnimatingSwipe = false
+            }
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -50,6 +82,7 @@ struct HomeView: View {
                 VStack {
                     Button(action: {
                         showAddBill.toggle()
+                        isDeleteMode = false
                     }) {
                         Label("Agregar Factura", systemImage: "plus.circle")
                             .font(.title2)
@@ -60,7 +93,6 @@ struct HomeView: View {
                             .cornerRadius(8)
                     }
                     Form {
-                        
                         Section(header: HStack {
                             Spacer()
                             Text("Buscar Facturas")
@@ -71,12 +103,11 @@ struct HomeView: View {
                                 .padding(8)
                                 .background(Color.black.opacity(0.2))
                                 .cornerRadius(8)
+                                .onChange(of: searchText) { _, newValue in
+                                    isDeleteMode = false
+                                }
                         }
                         .listRowBackground(Color.clear)
-                        
-                        
-                        
-                        
                         
                         if searchText.isEmpty {
                             Section(header: HStack {
@@ -128,6 +159,18 @@ struct HomeView: View {
                                             }
                                         }
                                     }
+                                    // Swipe to delete the entire year
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                        if isDeleteMode {
+                                            Button(role: .destructive) {
+                                                yearToDelete = year
+                                                showDeleteAlert = true
+                                            } label: {
+                                                Label("Eliminar", systemImage: "trash")
+                                            }
+                                        }
+                                    }
+                                    .offset(x: isAnimatingSwipe && isDeleteMode ? -30 : 0)
                                 }
                                 .listRowBackground(Color.black.opacity(0.2))
                             }
@@ -169,6 +212,31 @@ struct HomeView: View {
                 Spacer()
                 .padding()
                 .navigationTitle("Facturas")
+                .toolbar {
+                    // Config button to enable year deletion
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            isDeleteMode.toggle()
+                            if isDeleteMode {
+                                triggerSwipeAnimation()
+                            }
+                        }) {
+                            Image(systemName: isDeleteMode ? "checkmark.circle" : "trash")
+                        }
+                    }
+                }
+                .alert(isPresented: $showDeleteAlert) {
+                    Alert(
+                        title: Text("Eliminar Facturas"),
+                        message: Text("¿Está seguro de que desea eliminar todas las facturas del año \(yearToDelete ?? "")? Esta acción no se puede deshacer."),
+                        primaryButton: .destructive(Text("Eliminar")) {
+                            if let year = yearToDelete {
+                                deleteInvoices(from: year)
+                            }
+                        },
+                        secondaryButton: .cancel(Text("Cancelar"))
+                    )
+                }
                 .safeAreaPadding(.bottom, 5)
                 .sheet(isPresented: $showAddBill) {
                     AddInvoiceView()

@@ -52,5 +52,5 @@ struct YearPickerView: View {
 }
 
 #Preview {
-    YearPickerView(viewModel: GraphViewModel(invoices: []))
+    GraphView()
 }

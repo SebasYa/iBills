@@ -166,7 +166,6 @@ struct BalanceView: View {
             }
         }
         .onAppear {
-            //            selectedYear = groupedInvoices.keys.sorted().first ?? ""
             // Obtener el año corriente
             let currentYear = Calendar.current.component(.year, from: Date())
             // Convertir el año a string
@@ -183,7 +182,5 @@ struct BalanceView: View {
 }
 
 #Preview {
-    let modelContainer = try! ModelContainer(for: Invoice.self)
-    return BalanceView()
-        .environment(\.modelContext, modelContainer.mainContext)
+    BalanceView()
 }
