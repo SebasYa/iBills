@@ -2,7 +2,6 @@
 //  AddBillView.swift
 //  iBills
 //
-//  Created by Sebastian Yanni on 05/08/2024.
 //
 
 import SwiftUI
@@ -70,12 +69,15 @@ struct AddInvoiceView: View {
                         }
                     }
                 }
-                // Show an alert if there is an error when adding the invoice
-                .alert(isPresented: $viewModel.showErrorAlert) {
-                    Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? "Ocurrió un error inesperado."), dismissButton: .default(Text("OK")))
-                }
-                .alert(isPresented: $viewModel.showSuccessAlert) {
-                    Alert(title: Text("Factura Agregada"), message: Text(viewModel.successMessage ?? "La factura se agregó exitosamente."), dismissButton: .default(Text("OK")))
+                // Show an alert if there is an error or success when adding the invoice
+                .alert(isPresented: $viewModel.showAlert) {
+                    Alert(
+                        title: Text(viewModel.showErrorAlert ? "Error" : "Factura Agregada"),
+                        message: Text(viewModel.showErrorAlert ?
+                                      viewModel.errorMessage ?? "Ocurrió un error inesperado." :
+                                        viewModel.successMessage ?? "La factura se agregó exitosamente."),
+                        dismissButton: .default(Text("OK"))
+                    )
                 }
                 .onAppear {
                     viewModel.setContext(context)

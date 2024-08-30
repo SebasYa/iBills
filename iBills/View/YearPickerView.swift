@@ -2,7 +2,6 @@
 //  YearPickerView.swift
 //  iBills
 //
-//  Created by Sebastian Yanni on 27/08/2024.
 //
 
 import SwiftUI

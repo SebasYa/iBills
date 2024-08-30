@@ -2,7 +2,6 @@
 //  AuthenticationView.swift
 //  iBills
 //
-//  Created by Sebastian Yanni on 16/08/2024.
 //
 
 import SwiftUI

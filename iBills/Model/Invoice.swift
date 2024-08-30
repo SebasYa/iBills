@@ -2,7 +2,6 @@
 //  Invoice.swift
 //  iBills
 //
-//  Created by Sebastian Yanni on 05/08/2024.
 //
 
 import SwiftUI

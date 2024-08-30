@@ -2,7 +2,6 @@
 //  BalanceViewModel.swift
 //  iBills
 //
-//  Created by Sebastian Yanni on 24/08/2024.
 //
 
 import SwiftUI

@@ -2,7 +2,6 @@
 //  GraphViewModel.swift
 //  iBills
 //
-//  Created by Sebastian Yanni on 18/08/2024.
 //
 
 import SwiftUI

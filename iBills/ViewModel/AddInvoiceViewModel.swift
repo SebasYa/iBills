@@ -2,7 +2,6 @@
 //  AddInvoiceViewModel.swift
 //  iBills
 //
-//  Created by Sebastian Yanni on 22/08/2024.
 //
 
 import SwiftData
@@ -15,9 +14,10 @@ class AddInvoiceViewModel: ObservableObject {
     @Published var selectedDate = Date()
     @Published var razonSocial: String = ""
     @Published var numeroFactura: String = ""
+    
+    @Published var showAlert = false
     @Published var showErrorAlert = false
     @Published var errorMessage: String?
-    @Published var showSuccessAlert = false
     @Published var successMessage: String?
 
     private var context: ModelContext?
@@ -26,23 +26,32 @@ class AddInvoiceViewModel: ObservableObject {
         self.context = context
     }
     
+    private func allFieldsFilled() -> Bool {
+        return !amount.isEmpty && !razonSocial.isEmpty && !numeroFactura.isEmpty
+    }
+    
     // Adds a new invoice and saves it to the context
     func addInvoice() {
         guard let context = context else {
-            errorMessage = "El contexto no está disponible."
+            errorMessage = "Error interno: el contexto no está disponible."
             showErrorAlert = true
+            showAlert = true
+            return
+        }
+        
+        guard allFieldsFilled() else {
+            errorMessage = "Por favor, complete todos los campos para agregar la factura."
+            showErrorAlert = true
+            showAlert = true
+            print("Error: Falta completar campos del formulario.")
             return
         }
 
-        guard !amount.isEmpty, let amountValue = Double(amount), amountValue > 0 else {
+        // Convert amount to Double
+        guard let amountValue = Double(amount), amountValue > 0 else {
             errorMessage = "El monto total debe ser un número positivo."
             showErrorAlert = true
-            return
-        }
-
-        guard !razonSocial.isEmpty else {
-            errorMessage = "La razón social no puede estar vacía."
-            showErrorAlert = true
+            showAlert = true
             return
         }
 
@@ -53,7 +62,7 @@ class AddInvoiceViewModel: ObservableObject {
             isDebit: isDebit,
             date: selectedDate,
             razonSocial: razonSocial,
-            numeroFactura: numeroFactura.isEmpty ? nil : numeroFactura
+            numeroFactura: numeroFactura
         )
         
         print("Agregar Factura:")
@@ -70,12 +79,16 @@ class AddInvoiceViewModel: ObservableObject {
             try context.save()
             
             successMessage = "Factura agregada con éxito. IVA discriminado: \(String(format: "%.2f", invoice.iva))"
-            showSuccessAlert = true
+            showErrorAlert = false
+            showAlert = true
+            print("Factura guardada exitosamente: \(invoice)")
             
             clearForm()
         } catch {
-            errorMessage = "No se pudo guardar la factura. Intenta nuevamente."
+            errorMessage = "No se pudo guardar la factura. Intenta nuevamente: \(error.localizedDescription)"
             showErrorAlert = true
+            showAlert = true
+            print("Error al guardar la factura: \(error.localizedDescription)")
         }
     }
     
