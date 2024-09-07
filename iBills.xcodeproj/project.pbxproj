@@ -30,6 +30,7 @@
 		DB9A95962C7E471100FE559F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95952C7E471100FE559F /* ContentView.swift */; };
 		DBA266422C7E750700CEAD51 /* YearButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA266412C7E750700CEAD51 /* YearButtonsView.swift */; };
 		DBA266442C7E778700CEAD51 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DBA266432C7E778700CEAD51 /* Launch Screen.storyboard */; };
+		DBA266582C88F14E00CEAD51 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA266572C88F14E00CEAD51 /* HomeViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		DB9A95952C7E471100FE559F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		DBA266412C7E750700CEAD51 /* YearButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearButtonsView.swift; sourceTree = "<group>"; };
 		DBA266432C7E778700CEAD51 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		DBA266572C88F14E00CEAD51 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				DB9A958B2C770AFF00FE559F /* AuthenticationViewModel.swift */,
+				DBA266572C88F14E00CEAD51 /* HomeViewModel.swift */,
 				DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */,
 				DB9A957D2C72809900FE559F /* GraphViewModel.swift */,
 				DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */,
@@ -235,6 +238,7 @@
 				DB9A95882C77073300FE559F /* GraphTypeButtonsView.swift in Sources */,
 				DB9A958A2C7707C600FE559F /* GraphSectionView.swift in Sources */,
 				DB612D472C613028006D9E8B /* iBillsApp.swift in Sources */,
+				DBA266582C88F14E00CEAD51 /* HomeViewModel.swift in Sources */,
 				DB9A95802C73CF6700FE559F /* ChartType.swift in Sources */,
 				DB612D5D2C615DAF006D9E8B /* HomeView.swift in Sources */,
 				DB9A95922C79AF9300FE559F /* BalanceViewModel.swift in Sources */,

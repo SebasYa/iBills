@@ -2,6 +2,7 @@
 //  Home.swift
 //  iBills
 //
+//  Created by Sebastian Yanni.
 //
 
 import SwiftUI
@@ -11,64 +12,8 @@ struct HomeView: View {
     @Environment(\.modelContext) private var context
     @Query private var invoices: [Invoice]
     
-    // State variables to manage showing the add bill view and search text
-    @State private var showAddBill = false
-    @State private var searchText = ""
-    
-    @State private var showDeleteAlert = false
-    @State private var yearToDelete: String?
+    @StateObject private var viewModel = HomeViewModel()
 
-    // State variables to manage year deletion mode and swipe animation
-    @State private var isDeleteMode = false
-    @State private var isAnimatingSwipe = false
-    
-    // Computed property to filter invoices based on the search text
-    var filteredInvoices: [Invoice] {
-        if searchText.isEmpty {
-            return invoices
-        } else {
-            return invoices.filter { invoice in
-                invoice.razonSocial.localizedCaseInsensitiveContains(searchText) ||
-                (invoice.numeroFactura?.localizedCaseInsensitiveContains(searchText) ?? false)
-            }
-        }
-    }
-
-    // Computed property to group invoices by year
-    var groupedInvoices: [String: [Invoice]] {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy"
-        return Dictionary(grouping: invoices) { invoice in
-            dateFormatter.string(from: invoice.date)
-        }
-    }
-
-    // Function to delete all invoices from a specific year
-        private func deleteInvoices(from year: String) {
-            guard let invoicesToDelete = groupedInvoices[year] else { return }
-            for invoice in invoicesToDelete {
-                context.delete(invoice)
-            }
-            do {
-                try context.save()
-            } catch {
-                print("Error al guardar el contexto: \(error.localizedDescription)")
-            }
-        }
-    
-    // Function to trigger the swipe animation for year deletion
-    private func triggerSwipeAnimation() {
-        withAnimation {
-            isAnimatingSwipe = true
-        }
-        // Automatically reset the animation after a short delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            withAnimation {
-                isAnimatingSwipe = false
-            }
-        }
-    }
-    
     var body: some View {
         NavigationView {
             ZStack {
@@ -78,10 +23,12 @@ struct HomeView: View {
                     endPoint: .bottom
                 )
                 .edgesIgnoringSafeArea(.all)
+
                 VStack {
+                    // Button to add a new invoice
                     Button(action: {
-                        showAddBill.toggle()
-                        isDeleteMode = false
+                        viewModel.showAddBill.toggle()
+                        viewModel.isDeleteYearMode = false
                     }) {
                         Label("Agregar Factura", systemImage: "plus.circle")
                             .font(.title2)
@@ -91,115 +38,58 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
+
                     Form {
                         Section(header: HStack {
                             Spacer()
                             Text("Buscar Facturas")
                             Spacer()
                         }) {
-                            TextField("Razón Social o Número de Factura", text: $searchText)
+                            TextField("Razón Social o Número de Factura", text: $viewModel.searchText)
                                 .foregroundStyle(Color.white)
                                 .padding(8)
                                 .background(Color.black.opacity(0.2))
                                 .cornerRadius(8)
-                                .onChange(of: searchText) { _, newValue in
-                                    isDeleteMode = false
-                                }
+                        }
+                        .onChange(of: viewModel.searchText) { _, _ in
+                            viewModel.isDeleteYearMode = false
                         }
                         .listRowBackground(Color.clear)
-                        
-                        if searchText.isEmpty {
+
+                        if viewModel.searchText.isEmpty {
+                            let groupedInvoices = viewModel.groupInvoicesByYear(invoices: invoices)
                             Section(header: HStack {
                                 Spacer()
                                 Text("Facturas por Año")
                                 Spacer()
                             }) {
-                                
                                 ForEach(groupedInvoices.keys.sorted(), id: \.self) { year in
                                     DisclosureGroup(year) {
                                         ForEach(groupedInvoices[year] ?? []) { invoice in
-                                            VStack(alignment: .leading, spacing: 8) {
-                                                Text("Razón Social: \(invoice.razonSocial)")
-                                                Text("Es Débito: \(invoice.isDebit ? "Sí" : "No")")
-                                                if let numeroFactura = invoice.numeroFactura {
-                                                    Text("Número de Factura: \(numeroFactura)")
-                                                        .font(.subheadline)
-                                                        .foregroundStyle(.secondary)
-                                                }
-                                                Text("IVA: $\(invoice.vatRate, specifier: "%.1f")%")
-                                                    .font(.subheadline)
-                                                    .foregroundStyle(.secondary)
-                                                Text("Monto Total: $\(invoice.amount, specifier: "%.2f")")
-                                                    .foregroundStyle(.green)
-                                                Text("Monto Neto: $\(invoice.netAmount, specifier: "%.2f")")
-                                                    .foregroundStyle(.green)
-                                                Text("IVA Discriminado: $\(invoice.iva, specifier: "%.2f")")
-                                                    .foregroundStyle(Color("FullRedColor"))
-                                                Text("Fecha: \(invoice.date, style: .date)")
-                                                    .font(.subheadline)
-                                                    .foregroundStyle(.secondary)
-                                                
-                                            }
-                                            .padding()
-                                            .cornerRadius(10)
+                                            InvoiceRow(invoice: invoice, disableSwipe: viewModel.isDeleteYearMode)
                                         }
-                                        // Enable deleting invoices from the group
-                                        .onDelete { indexSet in
-                                            for index in indexSet {
-                                                if let invoiceToDelete = groupedInvoices[year]?[index] {
-                                                    context.delete(invoiceToDelete)
-                                                }
-                                            }
-                                            // Save context changes
-                                            do {
-                                                try context.save()
-                                            } catch {
-                                                print("Error al guardar el contexto: \(error.localizedDescription)")
-                                            }
-                                        }
+                                        .listRowBackground(Color.black.opacity(0.2))
                                     }
-                                    // Swipe to delete the entire year
+                                    .offset(x: viewModel.isAnimatingSwipe && viewModel.isDeleteYearMode ? -30 : 0)
+                                    .listRowBackground(Color.black.opacity(0.2))
+                                    // Swipe action to delete the entire year
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                        if isDeleteMode {
+                                        if viewModel.isDeleteYearMode {
                                             Button(role: .destructive) {
-                                                yearToDelete = year
-                                                showDeleteAlert = true
+                                                viewModel.yearToDelete = year
+                                                viewModel.showDeleteAlert = true
                                             } label: {
-                                                Label("Eliminar", systemImage: "trash")
+                                                Label("Eliminar Año", systemImage: "trash")
                                             }
                                         }
                                     }
-                                    .offset(x: isAnimatingSwipe && isDeleteMode ? -30 : 0)
                                 }
-                                .listRowBackground(Color.black.opacity(0.2))
                             }
                         } else {
-                            // Show only the invoices filtered during the search
+                            // Filtered invoices section
                             Section(header: Text("Resultados de Búsqueda")) {
-                                ForEach(filteredInvoices) { invoice in
-                                    VStack(alignment: .leading) {
-                                        Text("Razón Social: \(invoice.razonSocial)")
-                                        Text("Es Débito: \(invoice.isDebit ? "Sí" : "No")")
-                                        if let numeroFactura = invoice.numeroFactura {
-                                            Text("Número de Factura: \(numeroFactura)")
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                        Text("IVA: $\(invoice.vatRate, specifier: "%.1f")%")
-                                            .font(.subheadline)
-                                            .foregroundStyle(.secondary)
-                                        Text("Monto Total: $\(invoice.amount, specifier: "%.2f")")
-                                            .foregroundStyle(Color.green)
-                                        Text("Monto Neto: $\(invoice.netAmount, specifier: "%.2f")")
-                                            .foregroundStyle(Color.green)
-                                        Text("IVA Discriminado: $\(invoice.iva, specifier: "%.2f")")
-                                            .foregroundStyle(Color("FullRedColor"))
-                                        Text("Fecha: \(invoice.date, style: .date)")
-                                            .font(.subheadline)
-                                            .foregroundStyle(.secondary)
-                                        
-                                    }
-                                    
+                                ForEach(viewModel.filteredInvoices(invoices: invoices)) { invoice in
+                                    InvoiceRow(invoice: invoice, disableSwipe: false)
                                 }
                             }
                             .listRowBackground(Color.black.opacity(0.2))
@@ -209,38 +99,55 @@ struct HomeView: View {
                     .background(Color.clear)
                 }
                 Spacer()
-                .padding()
-                .navigationTitle("Facturas")
-                .toolbar {
-                    // Config button to enable year deletion
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            isDeleteMode.toggle()
-                            if isDeleteMode {
-                                triggerSwipeAnimation()
-                            }
-                        }) {
-                            Image(systemName: isDeleteMode ? "checkmark.circle" : "trash")
+            }
+            .navigationTitle("Facturas")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        viewModel.isDeleteYearMode.toggle()
+                        if viewModel.isDeleteYearMode {
+                            triggerSwipeAnimation()
                         }
+                    }) {
+                        HStack {
+                            VStack {
+                                Image(systemName: viewModel.isDeleteYearMode ? "checkmark.circle" : "trash")
+                                    .foregroundStyle(Color.primary)
+                                Text(viewModel.isDeleteYearMode ? "Terminar" : "Eliminar Años")
+                                    .foregroundStyle(Color.primary)
+                            }
+                        }
+
                     }
                 }
-                .alert(isPresented: $showDeleteAlert) {
-                    Alert(
-                        title: Text("Eliminar Facturas"),
-                        message: Text("¿Está seguro de que desea eliminar todas las facturas del año \(yearToDelete ?? "")? Esta acción no se puede deshacer."),
-                        primaryButton: .destructive(Text("Eliminar")) {
-                            if let year = yearToDelete {
-                                deleteInvoices(from: year)
-                            }
-                        },
-                        secondaryButton: .cancel(Text("Cancelar"))
-                    )
-                }
-                .safeAreaPadding(.bottom, 5)
-                .sheet(isPresented: $showAddBill) {
-                    AddInvoiceView()
-                        .environment(\.modelContext, context)
-                }
+            }
+            .alert(isPresented: $viewModel.showDeleteAlert) {
+                Alert(
+                    title: Text("Eliminar Facturas Anuales"),
+                    message: Text("¿Está seguro de que desea eliminar todas las facturas del año \(viewModel.yearToDelete ?? "")? Esta acción no se puede deshacer."),
+                    primaryButton: .destructive(Text("Eliminar")) {
+                        if let year = viewModel.yearToDelete {
+                            viewModel.deleteYearInvoices(from: year, invoicesByYear: viewModel.groupInvoicesByYear(invoices: invoices), context: context)
+                        }
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
+            .sheet(isPresented: $viewModel.showAddBill) {
+                AddInvoiceView()
+                    .environment(\.modelContext, context)
+            }
+        }
+    }
+
+    // Trigger animation for swipe action
+    private func triggerSwipeAnimation() {
+        withAnimation {
+            viewModel.isAnimatingSwipe = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            withAnimation {
+                viewModel.isAnimatingSwipe = false
             }
         }
     }
@@ -248,4 +155,69 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+}
+
+struct InvoiceRow: View {
+    @Environment(\.modelContext) private var context
+    @State private var showDeleteInvoiceAlert = false
+    var invoice: Invoice
+    var disableSwipe: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Razón Social: \(invoice.razonSocial)")
+            Text("Es Débito: \(invoice.isDebit ? "Sí" : "No")")
+            if let numeroFactura = invoice.numeroFactura {
+                Text("Número de Factura: \(numeroFactura)")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            Text("IVA: $\(invoice.vatRate, specifier: "%.1f")%")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Text("Monto Total: $\(invoice.amount, specifier: "%.2f")")
+                .foregroundStyle(.green)
+            Text("Monto Neto: $\(invoice.netAmount, specifier: "%.2f")")
+                .foregroundStyle(.green)
+            Text("IVA Discriminado: $\(invoice.iva, specifier: "%.2f")")
+                .foregroundStyle(Color("FullRedColor"))
+            Text("Fecha: \(invoice.date, style: .date)")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .cornerRadius(10)
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            if !disableSwipe {
+                Button(role: .destructive) {
+                    showDeleteInvoiceAlert = true
+                } label: {
+                    Label("Eliminar\nFactura", systemImage: "trash")
+                }
+            }
+        }
+        .alert(isPresented: $showDeleteInvoiceAlert) {
+            Alert(
+                title: Text("Eliminar Factura"),
+                message: Text("¿Está seguro de que desea eliminar esta factura?"),
+                primaryButton: .destructive(Text("Eliminar")) {
+                    deleteInvoice(invoice)
+                },
+                secondaryButton: .cancel()
+            )
+        }
+    }
+
+    private func deleteInvoice(_ invoice: Invoice) {
+        context.delete(invoice)
+        saveContext()
+    }
+
+    private func saveContext() {
+        do {
+            try context.save()
+        } catch {
+            print("Error al guardar el contexto: \(error.localizedDescription)")
+        }
+    }
 }

@@ -2,6 +2,7 @@
 //  ChartType.swift
 //  iBills
 //
+//  Created by Sebastian Yanni.
 //
 
 

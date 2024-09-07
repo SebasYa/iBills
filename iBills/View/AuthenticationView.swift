@@ -2,6 +2,7 @@
 //  AuthenticationView.swift
 //  iBills
 //
+//  Created by Sebastian Yanni.
 //
 
 import SwiftUI
@@ -11,6 +12,18 @@ struct AuthenticationView: View {
     
     var body: some View {
         VStack {
+            
+            Spacer()
+                .padding(.top, 40)
+            
+            Text("Autenticación Requerida")
+                .font(.title)
+                .foregroundStyle(.blue)
+                .font(.headline)
+                .padding()
+            Spacer()
+            
+            
             Image(systemName: "faceid")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -18,14 +31,18 @@ struct AuthenticationView: View {
                 .foregroundStyle(.blue)
                 .padding()
             
-            Text("Autenticación Requerida")
-                .foregroundStyle(.blue)
-                .font(.headline)
-                .padding()
-            
-            Button("Autenticar con Face ID") {
+            Button(action: {
                 viewModel.authenticate()
+            }) {
+                Text("Autenticar con Face ID")
+                    .font(.callout)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
             }
+            .buttonStyle(PlainButtonStyle())
             .padding()
             
             if !viewModel.authErrorMessage.isEmpty {
@@ -33,6 +50,10 @@ struct AuthenticationView: View {
                     .foregroundColor(.red)
                     .padding()
             }
+            
+            Spacer()
+                .padding(.bottom)
+            
         }
         .onAppear {
             viewModel.authenticate()
