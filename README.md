@@ -62,8 +62,8 @@ We are utilizing the beta version of iOS 18 and the feature to enhance user expe
 4. **Interactive Charts**:
     - Use the interactive charts to gain insights into your invoice data.
 
-5. **Custom Settings**:
-    - Access settings to adjust the application preferences according to your needs.
+5. **Invoice Management**:
+    - Delete invoices individually or remove all invoices for a year with ease.
 
 ## Contribution
 
@@ -75,6 +75,3 @@ Contributions are welcome! If you would like to contribute to this project, plea
 4. **Push your changes** to your fork (`git push origin feature/new-feature`).
 5. **Create a Pull Request** on GitHub.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
