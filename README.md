@@ -54,7 +54,7 @@ We are utilizing the beta version of iOS 18 and the feature to enhance user expe
     - On launching the app, you will see the main screen where you can view and manage your invoices.
 
 2. **Managing Invoices**:
-    - Add new invoices, edit existing ones, and delete them as needed. 
+    - Add new invoices, edit existing ones, and delete individually or remove all invoices from a specific year as needed. 
 
 3. **VAT Tracking**:
     - View detailed VAT information and track VAT balance for each year. 
@@ -62,8 +62,6 @@ We are utilizing the beta version of iOS 18 and the feature to enhance user expe
 4. **Interactive Charts**:
     - Use the interactive charts to gain insights into your invoice data.
 
-5. **Invoice Management**:
-    - Delete invoices individually or remove all invoices for a year with ease.
 
 ## Contribution
 
