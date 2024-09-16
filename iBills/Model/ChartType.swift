@@ -9,16 +9,16 @@
 import Foundation
 
 enum ChartType: CaseIterable {
-    case debit
-    case difference
     case credit
+    case difference
+    case debit
     
     
     var title: String {
         switch self {
-        case .debit: return "Débito"
-        case .difference: return "Diferencia"
         case .credit: return "Crédito"
+        case .difference: return "Diferencia"
+        case .debit: return "Débito"
         }
     }
 }

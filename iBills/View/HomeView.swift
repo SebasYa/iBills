@@ -165,8 +165,12 @@ struct InvoiceRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Razón Social: \(invoice.razonSocial)")
-            Text("Es Débito: \(invoice.isDebit ? "Sí" : "No")")
+            HStack {
+                Text("Razón Social:")
+                Text("\(invoice.razonSocial)")
+                    .foregroundStyle(Color("RazonSocialColor"))
+            }
+            Text("Es Crédito: \(invoice.isCredit ? "Sí" : "No")")
             if let numeroFactura = invoice.numeroFactura {
                 Text("Número de Factura: \(numeroFactura)")
                     .font(.subheadline)
@@ -176,9 +180,9 @@ struct InvoiceRow: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Text("Monto Total: $\(invoice.amount, specifier: "%.2f")")
-                .foregroundStyle(.green)
+                .foregroundStyle(Color("GreenMontoColor"))
             Text("Monto Neto: $\(invoice.netAmount, specifier: "%.2f")")
-                .foregroundStyle(.green)
+                .foregroundStyle(Color("GreenMontoColor"))
             Text("IVA Discriminado: $\(invoice.iva, specifier: "%.2f")")
                 .foregroundStyle(Color("FullRedColor"))
             Text("Fecha: \(invoice.date, style: .date)")

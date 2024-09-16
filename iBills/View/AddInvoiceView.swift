@@ -45,9 +45,10 @@ struct AddInvoiceView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     
-                    Toggle(isOn: $viewModel.isDebit) {
-                        Text(viewModel.isDebit ? "I.V.A Débito" : "I.V.A Crédito")
+                    Toggle(isOn: $viewModel.isCredit) {
+                        Text(viewModel.isCredit ? "I.V.A Crédito" : "I.V.A Débito")
                     }
+                    .foregroundStyle(viewModel.isCredit ? Color.green : Color.red)
                     
 
                     Button(action: {

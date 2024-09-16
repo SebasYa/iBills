@@ -33,7 +33,7 @@ struct BalanceView: View {
                 .edgesIgnoringSafeArea(.all)
 
                 VStack {
-                    // Botones de selección de año
+                    // Year selection buttons
                     YearButtonsView(years: Array(groupedInvoices.keys.sorted()), selectedYear: $selectedYear)
                     
                     if let yearInvoices = groupedInvoices[selectedYear], !yearInvoices.isEmpty  {
@@ -41,18 +41,18 @@ struct BalanceView: View {
                             Section(header: Text("Balance de IVA \(selectedYear)")) {
                                 VStack(alignment: .leading, spacing: 16) {
                                     HStack {
-                                        Text("Total IVA Débito:")
-                                            .foregroundStyle(Color("LDBrownColor"))
-                                        Spacer()
-                                        Text("$\(viewModel.totalDebitIVA(invoices: yearInvoices), specifier: "%.2f")")
-                                            .foregroundColor(.green)
-                                    }
-
-                                    HStack {
                                         Text("Total IVA Crédito:")
                                             .foregroundStyle(Color("LDBrownColor"))
                                         Spacer()
                                         Text("$\(viewModel.totalCreditIVA(invoices: yearInvoices), specifier: "%.2f")")
+                                            .foregroundColor(.green)
+                                    }
+                                    
+                                    HStack {
+                                        Text("Total IVA Débito:")
+                                            .foregroundStyle(Color("LDBrownColor"))
+                                        Spacer()
+                                        Text("$\(viewModel.totalDebitIVA(invoices: yearInvoices), specifier: "%.2f")")
                                             .foregroundColor(.red)
                                     }
 
@@ -75,6 +75,7 @@ struct BalanceView: View {
                         Text("Ingresa Facturas para generar un Balance")
                             .foregroundColor(.gray)
                             .padding()
+                        Spacer()
                     }
                 }
                 .navigationTitle("Balance de IVA")

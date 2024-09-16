@@ -12,15 +12,15 @@ import SwiftData
 class Invoice {
     var amount: Double
     var vatRate: Double
-    var isDebit: Bool
+    var isCredit: Bool
     var date: Date
     var razonSocial: String
     var numeroFactura: String?
 
-    init(amount: Double, vatRate: Double, isDebit: Bool, date: Date, razonSocial: String, numeroFactura: String? = nil) {
+    init(amount: Double, vatRate: Double, isCredit: Bool, date: Date, razonSocial: String, numeroFactura: String? = nil) {
         self.amount = amount
         self.vatRate = vatRate
-        self.isDebit = isDebit
+        self.isCredit = isCredit
         self.date = date
         self.razonSocial = razonSocial
         self.numeroFactura = numeroFactura

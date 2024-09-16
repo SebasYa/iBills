@@ -43,16 +43,17 @@ struct GraphView: View {
                             VStack {
                                 switch viewModel.selectedChartType {
                                     
-                                case .debit:
+                                case .credit:
                                     GraphSectionView(
-                                        selectedDate: $viewModel.selectedDebitDate,
-                                        selectedIndex: $viewModel.selectedDebitIndex,
-                                        title: "IVA Débito",
-                                        data: viewModel.cachedCumulativeDebit,
+                                        selectedDate: $viewModel.selectedCreditDate,
+                                        selectedIndex: $viewModel.selectedCreditIndex,
+                                        title: "IVA Crédito",
+                                        data: viewModel.cachedCumulativeCredit,
                                         dates: viewModel.cachedAllDates,
                                         color: Color.green,
                                         viewModel: viewModel
                                     )
+
                                     
                                 case .difference:
                                     GraphSectionView(
@@ -64,12 +65,14 @@ struct GraphView: View {
                                         color: Color.indigo,
                                         viewModel: viewModel
                                     )
-                                case .credit:
+                                
+                                    
+                                case .debit:
                                     GraphSectionView(
-                                        selectedDate: $viewModel.selectedCreditDate,
-                                        selectedIndex: $viewModel.selectedCreditIndex,
-                                        title: "IVA Crédito",
-                                        data: viewModel.cachedCumulativeCredit,
+                                        selectedDate: $viewModel.selectedDebitDate,
+                                        selectedIndex: $viewModel.selectedDebitIndex,
+                                        title: "IVA Débito",
+                                        data: viewModel.cachedCumulativeDebit,
                                         dates: viewModel.cachedAllDates,
                                         color: Color.red,
                                         viewModel: viewModel

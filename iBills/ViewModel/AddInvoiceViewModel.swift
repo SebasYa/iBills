@@ -11,7 +11,7 @@ import SwiftUI
 class AddInvoiceViewModel: ObservableObject {
     @Published var amount: String = ""
     @Published var selectedVAT: Double = 21.0
-    @Published var isDebit: Bool = true
+    @Published var isCredit: Bool = true
     @Published var selectedDate = Date()
     @Published var razonSocial: String = ""
     @Published var numeroFactura: String = ""
@@ -60,7 +60,7 @@ class AddInvoiceViewModel: ObservableObject {
         let invoice = Invoice(
             amount: amountValue,
             vatRate: selectedVAT,
-            isDebit: isDebit,
+            isCredit: isCredit,
             date: selectedDate,
             razonSocial: razonSocial,
             numeroFactura: numeroFactura
@@ -71,7 +71,7 @@ class AddInvoiceViewModel: ObservableObject {
         print("Porcentaje de IVA: \(selectedVAT)")
         print("Razón Social: \(razonSocial)")
         print("Número de Factura: \(numeroFactura)")
-        print("Tipo: \(isDebit ? "Débito" : "Crédito")")
+        print("Tipo: \(isCredit ? "Crédito" : "Débito")")
         print("Fecha: \(selectedDate)")
         print("IVA Calculado: \(invoice.iva)")
         
@@ -99,7 +99,7 @@ class AddInvoiceViewModel: ObservableObject {
         razonSocial = ""
         numeroFactura = ""
         selectedVAT = 21.0
-        isDebit = true
+        isCredit = true
         selectedDate = Date()
     }
 }

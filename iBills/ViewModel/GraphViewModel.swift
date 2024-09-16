@@ -15,7 +15,7 @@ class GraphViewModel: ObservableObject {
         }
     }
     
-    @Published var selectedChartType: ChartType = .debit
+    @Published var selectedChartType: ChartType = .credit
     @Published var selectedYear: String = Calendar.current.component(.year, from: Date()).description
     
     @Published var selectedDebitDate: Date? = nil
@@ -80,23 +80,23 @@ class GraphViewModel: ObservableObject {
         // Ordenar todas las fechas
         cachedAllDates = cachedGroupedInvoices.keys.sorted()
         
-        // Calculate cumulative values for Debit and Credit
+        // Calculate cumulative values for Credit and Debit
         cachedCumulativeDebit = cachedAllDates.map { date in
-            cachedGroupedInvoices[date]?.filter { $0.isDebit }.reduce(0) { $0 + $1.iva } ?? 0
+            cachedGroupedInvoices[date]?.filter { $0.isCredit }.reduce(0) { $0 + $1.iva } ?? 0
         }.reduce(into: []) { result, value in
             let cumulativeValue = (result.last ?? 0) + value
             result.append(cumulativeValue)
         }
         
         cachedCumulativeCredit = cachedAllDates.map { date in
-            cachedGroupedInvoices[date]?.filter { !$0.isDebit }.reduce(0) { $0 + $1.iva } ?? 0
+            cachedGroupedInvoices[date]?.filter { !$0.isCredit }.reduce(0) { $0 + $1.iva } ?? 0
         }.reduce(into: []) { result, value in
             let cumulativeValue = (result.last ?? 0) + value
             result.append(cumulativeValue)
         }
         
-        // Calculate daily average (difference between Debit and Credit)
-        cachedDailyAverage = zip(cachedCumulativeDebit, cachedCumulativeCredit).map { $0 - $1 }
+        // Calculate daily average (difference between Credit and Debit)
+        cachedDailyAverage = zip(cachedCumulativeCredit, cachedCumulativeDebit).map { $0 - $1 }
     }
     
     // Determines the selected date based on x position in the chart

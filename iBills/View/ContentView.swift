@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var activeTab: TabModel = .home
-    @State private var isTabBarHidden: Bool = false
+    @State private var isTabBarHidden = false
     
     var body: some View {
         ZStack (alignment: .bottom) {
