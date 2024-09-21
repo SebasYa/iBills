@@ -54,7 +54,7 @@ We are utilizing the beta version of iOS 18 and the feature to enhance user expe
     - On launching the app, you will see the main screen where you can view and manage your invoices.
 
 2. **Managing Invoices**:
-    - Add new invoices, edit existing ones, and delete them as needed. 
+    - Add new invoices, edit existing ones, and delete individually or remove all invoices from a specific year as needed. 
 
 3. **VAT Tracking**:
     - View detailed VAT information and track VAT balance for each year. 
@@ -62,8 +62,6 @@ We are utilizing the beta version of iOS 18 and the feature to enhance user expe
 4. **Interactive Charts**:
     - Use the interactive charts to gain insights into your invoice data.
 
-5. **Custom Settings**:
-    - Access settings to adjust the application preferences according to your needs.
 
 ## Contribution
 
@@ -74,7 +72,3 @@ Contributions are welcome! If you would like to contribute to this project, plea
 3. **Make your changes** and commit them (`git commit -m 'Add new feature'`).
 4. **Push your changes** to your fork (`git push origin feature/new-feature`).
 5. **Create a Pull Request** on GitHub.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
