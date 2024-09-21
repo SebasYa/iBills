@@ -15,6 +15,7 @@ struct CustomTabBarView: View {
     @Binding var activeTab : TabModel
     @Namespace private var animation
     @State private var tabLocation: CGRect = .zero
+    
     var body: some View {
             HStack(spacing: 0) {
                 ForEach(TabModel.allCases, id: \.rawValue) { tab in
@@ -69,6 +70,7 @@ struct CustomTabBarView: View {
             .background(
                 // Shadow and background styling for the tab bar
                 .background
+                    .opacity(0.5)
                     .shadow(.drop(color: .black.opacity(0.08), radius: 5, x: 5, y: 5))
                     .shadow(.drop(color: .black.opacity(0.06), radius: 5, x: -5, y: -5)),
                 in: .capsule

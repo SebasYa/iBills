@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -125,8 +125,8 @@
 		DB9A957B2C70840D00FE559F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DB612D602C616A6C006D9E8B /* MainView.swift */,
 				DB9A95952C7E471100FE559F /* ContentView.swift */,
+				DB612D602C616A6C006D9E8B /* MainView.swift */,
 				DB9A95782C6FD74000FE559F /* AuthenticationView.swift */,
 				DB612D5C2C615DAF006D9E8B /* HomeView.swift */,
 				DB9A958F2C79AF7B00FE559F /* BalanceView.swift */,
@@ -187,7 +187,6 @@
 				};
 			};
 			buildConfigurationList = DB612D3E2C613028006D9E8B /* Build configuration list for PBXProject "iBills" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -195,6 +194,7 @@
 				Base,
 			);
 			mainGroup = DB612D3A2C613028006D9E8B;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = DB612D442C613028006D9E8B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -386,6 +386,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -421,6 +422,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
