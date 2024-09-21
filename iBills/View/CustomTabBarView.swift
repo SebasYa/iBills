@@ -70,7 +70,7 @@ struct CustomTabBarView: View {
             .background(
                 // Shadow and background styling for the tab bar
                 .background
-                    .opacity(0.5)
+                    .opacity(0.4)
                     .shadow(.drop(color: .black.opacity(0.08), radius: 5, x: 5, y: 5))
                     .shadow(.drop(color: .black.opacity(0.06), radius: 5, x: -5, y: -5)),
                 in: .capsule
