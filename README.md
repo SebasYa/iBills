@@ -16,7 +16,7 @@ iBills is a comprehensive invoice management application designed for handling a
 
 We are utilizing the beta version of iOS 18 and the feature to enhance user experience and animation transitions. The latest Swift Data framework is also employed to manage invoices efficiently.
 
-<img src="https://github.com/SebasYa/iBills/blob/main/iBillsGif.gif" alt="App Demo" width="250"/>
+<img src="https://github.com/SebasYa/iBills/blob/main/iBillGif.gif" alt="App Demo" width="260"/> <img src="https://github.com/SebasYa/iBills/blob/main/iBillsGif2.gif" alt="App Demo" width="270"/>
 
 
 ## Features
