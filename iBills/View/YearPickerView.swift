@@ -45,6 +45,7 @@ struct YearPickerView: View {
             .frame(height: 45)
             .background(
                 .background
+                    .opacity(0.4)
                     .shadow(.drop(color: .black.opacity(0.08), radius: 5, x: 5, y: 5))
                     .shadow(.drop(color: .black.opacity(0.06), radius: 5, x: -5, y: -5)),
                 in: .capsule
