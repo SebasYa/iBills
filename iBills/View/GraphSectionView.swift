@@ -16,7 +16,6 @@ struct GraphSectionView: View {
     @State private var lastDate: Date? = nil
     var dates: [Date]
     var color: Color
-    var viewModel: GraphViewModel
     
     var body: some View {
         Section(header: Text(title)) {
@@ -59,11 +58,9 @@ struct GraphSectionView: View {
                         .gesture(
                             DragGesture(minimumDistance: 0)
                                 .onChanged { value in
-                                    // Handle the drag gesture to update the selected date and index
-                                    viewModel.handleDragGesture(value: value, proxy: proxy, geometry: geometry, currentSelectedDate: $selectedDate, currentSelectedIndex: $selectedIndex, lastDate: $lastDate)
+                                    updateSelection(value: value, proxy: proxy, geometry: geometry)
                                 }
                                 .onEnded { _ in
-                                    // Reset selections when the drag ends
                                     selectedDate = nil
                                     selectedIndex = nil
                                     lastDate = nil
@@ -73,6 +70,33 @@ struct GraphSectionView: View {
             }
             .frame(height: 200)
         }
+    }
+
+    private func updateSelection(value: DragGesture.Value, proxy: ChartProxy, geometry: GeometryProxy) {
+        guard let chartDate = chartDate(for: value.location.x, proxy: proxy, geometry: geometry) else {
+            return
+        }
+
+        let roundedDate = Calendar.current.startOfDay(for: chartDate)
+        selectedDate = chartDate
+
+        if let lastDate, Calendar.current.isDate(lastDate, inSameDayAs: roundedDate) {
+            return
+        }
+
+        selectedIndex = closestIndex(to: roundedDate)
+        lastDate = roundedDate
+    }
+
+    private func chartDate(for xPosition: CGFloat, proxy: ChartProxy, geometry: GeometryProxy) -> Date? {
+        let chartXPosition = xPosition - geometry.frame(in: .local).origin.x
+        return proxy.value(atX: chartXPosition)
+    }
+
+    private func closestIndex(to date: Date) -> Int? {
+        dates.enumerated().min { lhs, rhs in
+            abs(lhs.element.timeIntervalSince(date)) < abs(rhs.element.timeIntervalSince(date))
+        }?.offset
     }
 }
 
@@ -102,7 +126,6 @@ let dateFormatter: DateFormatter = {
         title: "IVA Crédito",
         data: exampleData,
         dates: exampleDates,
-        color: .green,
-        viewModel: GraphViewModel()
+        color: .green
     )
 }

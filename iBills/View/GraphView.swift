@@ -50,20 +50,18 @@ struct GraphView: View {
                                         title: "IVA Crédito",
                                         data: viewModel.cachedCumulativeCredit,
                                         dates: viewModel.cachedAllDates,
-                                        color: Color.green,
-                                        viewModel: viewModel
+                                        color: Color.green
                                     )
 
                                     
-                                case .difference:
+                                case .balance:
                                     GraphSectionView(
-                                        selectedDate: $viewModel.selectedAverageDate,
-                                        selectedIndex: $viewModel.selectedAverageIndex,
+                                        selectedDate: $viewModel.selectedBalanceDate,
+                                        selectedIndex: $viewModel.selectedBalanceIndex,
                                         title: "Balance IVA",
-                                        data: viewModel.cachedDailyAverage,
+                                        data: viewModel.cachedCumulativeBalance,
                                         dates: viewModel.cachedAllDates,
-                                        color: Color.indigo,
-                                        viewModel: viewModel
+                                        color: Color.indigo
                                     )
                                 
                                     
@@ -74,8 +72,7 @@ struct GraphView: View {
                                         title: "IVA Débito",
                                         data: viewModel.cachedCumulativeDebit,
                                         dates: viewModel.cachedAllDates,
-                                        color: Color.red,
-                                        viewModel: viewModel
+                                        color: Color.red
                                     )
                                 }
                             }
@@ -86,7 +83,10 @@ struct GraphView: View {
                 .navigationTitle("Gráficos de IVA")
                 .onAppear {
                     viewModel.updateInvoices(invoices: invoices)
-            }
+                }
+                .onChange(of: invoices.count) { _, _ in
+                    viewModel.updateInvoices(invoices: invoices)
+                }
             }
         }
     }

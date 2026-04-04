@@ -11,8 +11,8 @@ import SwiftData
 struct AddInvoiceView: View {
     @Environment(\.modelContext) private var context
     @StateObject private var viewModel = AddInvoiceViewModel()
-    @FocusState private var invoiceNumberFocused: Bool
-    @FocusState private var amountIsFocused: Bool
+    @FocusState private var formIsFocused: Bool
+    @FocusState private var focusedInput: CreateInvoiceModel?
 
     var body: some View {
         NavigationView {
@@ -23,53 +23,73 @@ struct AddInvoiceView: View {
                     endPoint: .bottom
                 )
                 .edgesIgnoringSafeArea(.all)
+
                 Form {
                     TextField("Razón Social", text: $viewModel.razonSocial)
                         .keyboardType(.asciiCapable)
-                    
+                        .focused($formIsFocused)
+                        .focused($focusedInput, equals: .razonSocial)
+
                     TextField("Numero de Factura", text: $viewModel.numeroFactura)
                         .keyboardType(.numberPad)
-                        .focused($invoiceNumberFocused)
+                        .focused($formIsFocused)
+                        .focused($focusedInput, equals: .numeroDeFacturas)
 
                     TextField("Monto Total", text: $viewModel.amount)
                         .keyboardType(.decimalPad)
-                        .focused($amountIsFocused)
-                        
-                    
+                        .focused($formIsFocused)
+                        .focused($focusedInput, equals: .montoTotal)
+
+
                     DatePicker("Fecha", selection: $viewModel.selectedDate, displayedComponents: .date)
-                    
+
                     Picker("Porcentaje de IVA", selection: $viewModel.selectedVAT) {
                         Text("27%").tag(27.0)
                         Text("21%").tag(21.0)
                         Text("10,5%").tag(10.5)
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    
-                    Toggle(isOn: $viewModel.isCredit) {
-                        Text(viewModel.isCredit ? "I.V.A Crédito" : "I.V.A Débito")
+
+                    Toggle(isOn: Binding(
+                        get: { viewModel.isCreditSelection },
+                        set: { viewModel.isCreditSelection = $0 }
+                    )) {
+                        Text(viewModel.categoryTitle)
                     }
-                    .foregroundStyle(viewModel.isCredit ? Color.green : Color.red)
-                    
+                    .foregroundStyle(viewModel.isCreditSelection ? Color.green : Color.red)
+
 
                     Button(action: {
-                        DispatchQueue.main.async {
-                            viewModel.addInvoice()
-                        }
+                        viewModel.addInvoice()
                     }) {
                         Label("Agregar Factura", systemImage: "folder.fill.badge.plus")
-                        }
+                    }
                 }
                 .listRowBackground(Color.clear)
                 .scrollContentBackground(.hidden)
                 .background(Color.clear)
                 .navigationTitle("Agregar Factura")
                 .toolbar {
-                    if invoiceNumberFocused || amountIsFocused{
-                        Button("Done") {
-                            invoiceNumberFocused = false
-                            amountIsFocused = false
+
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Button("Done"){
+                            formIsFocused = false
+                        }
+                        Spacer()
+
+                        Button {
+                            focusedInput = (focusedInput ?? .razonSocial).previous
+                        } label: {
+                            Image(systemName: "chevron.up")
+                        }
+
+                        Button {
+                            focusedInput = (focusedInput ?? .razonSocial).next
+                        } label: {
+                            Image(systemName: "chevron.down")
                         }
                     }
+
                 }
                 // Show an alert if there is an error or success when adding the invoice
                 .alert(isPresented: $viewModel.showAlert) {
@@ -83,11 +103,15 @@ struct AddInvoiceView: View {
                 }
                 .onAppear {
                     viewModel.setContext(context)
-            }
+                    focusedInput = .razonSocial
+                }
             }
         }
     }
+
 }
+
+
 
 #Preview {
     let container = try! ModelContainer(for: Invoice.self)

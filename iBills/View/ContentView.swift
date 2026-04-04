@@ -28,7 +28,7 @@ struct ContentView: View {
                             GraphView()
                                 .toolbarVisibility(.hidden, for: .tabBar)
                         }
-                    }                    
+                    }
                 } else {
                     TabView(selection: $activeTab) {
                         HomeView()
@@ -36,7 +36,6 @@ struct ContentView: View {
                             .background {
                                 if !isTabBarHidden {
                                     HideTabBar {
-                                        print("Hidden")
                                         isTabBarHidden = true
                                     }
                                 }
@@ -50,7 +49,7 @@ struct ContentView: View {
                 }
             }
             CustomTabBarView(activeTab: $activeTab)
-                .padding(.bottom)
+                //.padding(.bottom)
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }

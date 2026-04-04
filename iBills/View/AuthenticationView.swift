@@ -34,7 +34,7 @@ struct AuthenticationView: View {
             Button(action: {
                 viewModel.authenticate()
             }) {
-                Text("Autenticar con Face ID")
+                Text(viewModel.isAuthenticating ? "Autenticando..." : "Autenticar")
                     .font(.callout)
                     .padding()
                     .background(Color.blue)
@@ -44,6 +44,7 @@ struct AuthenticationView: View {
             }
             .buttonStyle(PlainButtonStyle())
             .padding()
+            .disabled(viewModel.isAuthenticating)
             
             if !viewModel.authErrorMessage.isEmpty {
                 Text(viewModel.authErrorMessage)

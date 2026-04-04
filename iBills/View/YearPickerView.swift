@@ -18,8 +18,7 @@ struct YearPickerView: View {
                 ForEach(viewModel.availableYears, id: \.self) { year in
                     
                     Button {
-                        viewModel.selectedYear = year
-                        viewModel.cacheData(for: year)
+                        viewModel.selectYear(year)
                     } label: {
                         Text(year)
                             .padding(.horizontal, 12)

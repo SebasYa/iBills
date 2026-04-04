@@ -8,55 +8,76 @@
 import SwiftUI
 import SwiftData
 
-class HomeViewModel: ObservableObject {
+@MainActor
+final class HomeViewModel: ObservableObject {
     @Published var showAddBill = false
     @Published var searchText = ""
     @Published var showDeleteAlert = false
-    @Published var showDeleteInvoiceAlert = false
+    @Published var showErrorAlert = false
     @Published var yearToDelete: String?
-    @Published var invoiceToDelete: Invoice?
-    
+    @Published var errorMessage: String?
     @Published var isDeleteYearMode = false
     @Published var isAnimatingSwipe = false
-    
-    // Group invoices by year
-    func groupInvoicesByYear(invoices: [Invoice]) -> [String: [Invoice]] {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy"
-        
-        let groupedInvoices = Dictionary(grouping: invoices) { invoice in
-            dateFormatter.string(from: invoice.date)
-        }
-        
-        return groupedInvoices.mapValues { invoices in
-            invoices.sorted { $0.date < $1.date } // Orden ascendente por fecha (antigua a reciente)
-        }
+
+    private let analyticsService: InvoiceAnalyticsProviding
+    private var invoiceStore: InvoiceStoring?
+
+    init(analyticsService: InvoiceAnalyticsProviding = InvoiceAnalyticsService()) {
+        self.analyticsService = analyticsService
     }
-    
-    // Filter invoices based on search text
-    func filteredInvoices(invoices: [Invoice]) -> [Invoice] {
-        let filtered = invoices.filter { invoice in
-            invoice.razonSocial.localizedCaseInsensitiveContains(searchText) ||
-            (invoice.numeroFactura?.localizedCaseInsensitiveContains(searchText) ?? false)
-        }
-        return filtered.sorted { $0.date < $1.date }
+
+    func setContext(_ context: ModelContext) {
+        invoiceStore = SwiftDataInvoiceStore(context: context)
     }
-    
-    
-    // Delete all invoices for a specific year
-    func deleteYearInvoices(from year: String, invoicesByYear: [String: [Invoice]], context: ModelContext) {
-        if let invoicesToDelete = invoicesByYear[year] {
-            invoicesToDelete.forEach { context.delete($0) }
-        }
-        saveContext(context)
+
+    func groupedInvoices(byYearFrom invoices: [Invoice]) -> [String: [Invoice]] {
+        analyticsService.groupInvoicesByYear(invoices)
     }
-    
-    // Save the context to persist changes
-    func saveContext(_ context: ModelContext) {
+
+    func sortedYears(from invoices: [Invoice]) -> [String] {
+        analyticsService.availableYears(invoices: invoices)
+    }
+
+    func filteredInvoices(from invoices: [Invoice]) -> [Invoice] {
+        analyticsService.filterInvoices(invoices, searchText: searchText)
+    }
+
+    func deleteYearInvoices(from year: String, invoices: [Invoice]) {
+        guard let invoiceStore else {
+            presentError("No se pudo acceder al almacenamiento de facturas.")
+            return
+        }
+
+        let invoicesByYear = analyticsService.groupInvoicesByYear(invoices)
+        let invoicesToDelete = invoicesByYear[year, default: []]
+
+        guard !invoicesToDelete.isEmpty else {
+            return
+        }
+
         do {
-            try context.save()
+            try invoiceStore.delete(invoicesToDelete)
+            yearToDelete = nil
         } catch {
-            print("Error al guardar el contexto: \(error.localizedDescription)")
+            presentError("No se pudieron eliminar las facturas del año \(year). \(error.localizedDescription)")
         }
+    }
+
+    func deleteInvoice(_ invoice: Invoice) {
+        guard let invoiceStore else {
+            presentError("No se pudo acceder al almacenamiento de facturas.")
+            return
+        }
+
+        do {
+            try invoiceStore.delete(invoice)
+        } catch {
+            presentError("No se pudo eliminar la factura. \(error.localizedDescription)")
+        }
+    }
+
+    private func presentError(_ message: String) {
+        errorMessage = message
+        showErrorAlert = true
     }
 }

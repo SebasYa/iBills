@@ -6,21 +6,27 @@
 //
 
 import SwiftUI
-import SwiftData
 
-class BalanceViewModel: ObservableObject {
-    // Calculates the total debit IVA from a list of invoices
-    func totalDebitIVA(invoices: [Invoice]) -> Double {
-        return invoices.filter { $0.isCredit }.reduce(0) { $0 + $1.iva }
+final class BalanceViewModel: ObservableObject {
+    private let analyticsService: InvoiceAnalyticsProviding
+
+    init(analyticsService: InvoiceAnalyticsProviding = InvoiceAnalyticsService()) {
+        self.analyticsService = analyticsService
     }
-    
-    // Calculates the total credit IVA from a list of invoices
-    func totalCreditIVA(invoices: [Invoice]) -> Double {
-        return invoices.filter { !$0.isCredit }.reduce(0) { $0 + $1.iva }
+
+    func groupedInvoices(byYearFrom invoices: [Invoice]) -> [String: [Invoice]] {
+        analyticsService.groupInvoicesByYear(invoices)
     }
-    
-    // Calculates the net IVA (debit IVA - credit IVA)
-    func netIVA(invoices: [Invoice]) -> Double {
-        return totalCreditIVA(invoices: invoices) - totalDebitIVA(invoices: invoices)
+
+    func availableYears(from invoices: [Invoice]) -> [String] {
+        analyticsService.availableYears(invoices: invoices)
+    }
+
+    func defaultSelectedYear(from invoices: [Invoice], preferredYear: String) -> String {
+        analyticsService.defaultSelectedYear(from: invoices, preferredYear: preferredYear) ?? ""
+    }
+
+    func summary(for invoices: [Invoice]) -> VATBalanceSummary {
+        analyticsService.makeBalanceSummary(for: invoices)
     }
 }

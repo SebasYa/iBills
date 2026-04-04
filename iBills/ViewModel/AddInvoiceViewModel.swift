@@ -8,98 +8,94 @@
 import SwiftData
 import SwiftUI
 
-class AddInvoiceViewModel: ObservableObject {
+@MainActor
+final class AddInvoiceViewModel: ObservableObject {
     @Published var amount: String = ""
     @Published var selectedVAT: Double = 21.0
-    @Published var isCredit: Bool = true
+    @Published var selectedCategory: InvoiceCategory = .credit
     @Published var selectedDate = Date()
     @Published var razonSocial: String = ""
     @Published var numeroFactura: String = ""
-    
+
     @Published var showAlert = false
     @Published var showErrorAlert = false
     @Published var errorMessage: String?
     @Published var successMessage: String?
 
-    private var context: ModelContext?
+    private let invoiceCreator: InvoiceCreating
+    private var invoiceStore: InvoiceStoring?
+
+    init(invoiceCreator: InvoiceCreating = InvoiceFormService()) {
+        self.invoiceCreator = invoiceCreator
+    }
 
     func setContext(_ context: ModelContext) {
-        self.context = context
+        invoiceStore = SwiftDataInvoiceStore(context: context)
     }
-    
-    private func allFieldsFilled() -> Bool {
-        return !amount.isEmpty && !razonSocial.isEmpty && !numeroFactura.isEmpty
+
+    var isCreditSelection: Bool {
+        get { selectedCategory == .credit }
+        set { selectedCategory = newValue ? .credit : .debit }
     }
-    
-    // Adds a new invoice and saves it to the context
+
+    var categoryTitle: String {
+        selectedCategory.balanceTitle
+    }
+
     func addInvoice() {
-        guard let context = context else {
-            errorMessage = "Error interno: el contexto no está disponible."
-            showErrorAlert = true
-            showAlert = true
-            return
-        }
-        
-        guard allFieldsFilled() else {
-            errorMessage = "Por favor, complete todos los campos para agregar la factura."
-            showErrorAlert = true
-            showAlert = true
-            print("Error: Falta completar campos del formulario.")
+        guard let invoiceStore else {
+            presentError("Error interno: el contexto no está disponible.")
             return
         }
 
-        // Convert amount to Double
-        guard let amountValue = Double(amount), amountValue > 0 else {
-            errorMessage = "El monto total debe ser un número positivo."
-            showErrorAlert = true
-            showAlert = true
-            return
-        }
-
-        // Create the invoice
-        let invoice = Invoice(
-            amount: amountValue,
-            vatRate: selectedVAT,
-            isCredit: isCredit,
-            date: selectedDate,
+        let draft = InvoiceDraft(
             razonSocial: razonSocial,
-            numeroFactura: numeroFactura
+            numeroFactura: numeroFactura,
+            amountText: amount,
+            vatRate: selectedVAT,
+            category: selectedCategory,
+            date: selectedDate
         )
-        
-        print("Agregar Factura:")
-        print("Monto Total: \(amountValue)")
-        print("Porcentaje de IVA: \(selectedVAT)")
-        print("Razón Social: \(razonSocial)")
-        print("Número de Factura: \(numeroFactura)")
-        print("Tipo: \(isCredit ? "Crédito" : "Débito")")
-        print("Fecha: \(selectedDate)")
-        print("IVA Calculado: \(invoice.iva)")
-        
+
         do {
-            context.insert(invoice)
-            try context.save()
-            
-            successMessage = "Factura agregada con éxito. IVA discriminado: \(String(format: "%.2f", invoice.iva))"
+            let invoice = try invoiceCreator.makeInvoice(from: draft)
+            try invoiceStore.insert(invoice)
+
+            errorMessage = nil
+            successMessage = "Factura agregada con éxito. IVA discriminado: \(formattedAmount(invoice.ivaDecimal))"
             showErrorAlert = false
             showAlert = true
-            print("Factura guardada exitosamente: \(invoice)")
-            
             clearForm()
+        } catch let error as InvoiceDraftError {
+            presentError(error.errorDescription ?? "No se pudo validar la factura.")
         } catch {
-            errorMessage = "No se pudo guardar la factura. Intenta nuevamente: \(error.localizedDescription)"
-            showErrorAlert = true
-            showAlert = true
-            print("Error al guardar la factura: \(error.localizedDescription)")
+            presentError("No se pudo guardar la factura. Intenta nuevamente: \(error.localizedDescription)")
         }
     }
-    
-    // Clear the form fields
+
     private func clearForm() {
         amount = ""
         razonSocial = ""
         numeroFactura = ""
         selectedVAT = 21.0
-        isCredit = true
+        selectedCategory = .credit
         selectedDate = Date()
+    }
+
+    private func presentError(_ message: String) {
+        errorMessage = message
+        successMessage = nil
+        showErrorAlert = true
+        showAlert = true
+    }
+
+    private func formattedAmount(_ amount: Decimal) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = .current
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+
+        return formatter.string(from: NSDecimalNumber(decimal: amount)) ?? "\(amount.doubleValue)"
     }
 }

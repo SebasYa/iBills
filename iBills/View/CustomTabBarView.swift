@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct CustomTabBarView: View {
-    
+
     var activeForeground: Color = .white
     var activeBackground: Color = .blue
-    
+
     @Binding var activeTab : TabModel
     @Namespace private var animation
     @State private var tabLocation: CGRect = .zero
-    
+
     var body: some View {
             HStack(spacing: 0) {
                 ForEach(TabModel.allCases, id: \.rawValue) { tab in
@@ -27,7 +27,7 @@ struct CustomTabBarView: View {
                             Image(systemName: tab.rawValue)
                                 .font(.title3)
                                 .frame(width: 30, height: 30)
-                            
+
                             // Show the tab title only if this tab is active
                             if activeTab == tab {
                                 Text(tab.title)

@@ -14,15 +14,12 @@ struct BalanceView: View {
 
     @State private var selectedYear: String = ""
 
-    var groupedInvoices: [String: [Invoice]] {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy"
-        return Dictionary(grouping: invoices) { invoice in
-            dateFormatter.string(from: invoice.date)
-        }
-    }
-
     var body: some View {
+        let groupedInvoices = viewModel.groupedInvoices(byYearFrom: invoices)
+        let availableYears = viewModel.availableYears(from: invoices)
+        let selectedYearInvoices = groupedInvoices[selectedYear] ?? []
+        let summary = viewModel.summary(for: selectedYearInvoices)
+
         NavigationView {
             ZStack {
                 LinearGradient(
@@ -34,9 +31,9 @@ struct BalanceView: View {
 
                 VStack {
                     // Year selection buttons
-                    YearButtonsView(years: Array(groupedInvoices.keys.sorted()), selectedYear: $selectedYear)
+                    YearButtonsView(years: availableYears, selectedYear: $selectedYear)
                     
-                    if let yearInvoices = groupedInvoices[selectedYear], !yearInvoices.isEmpty  {
+                    if !selectedYearInvoices.isEmpty  {
                         Form {
                             Section(header: Text("Balance de IVA \(selectedYear)")) {
                                 VStack(alignment: .leading, spacing: 16) {
@@ -44,7 +41,7 @@ struct BalanceView: View {
                                         Text("Total IVA Crédito:")
                                             .foregroundStyle(Color("LDBrownColor"))
                                         Spacer()
-                                        Text("$\(viewModel.totalCreditIVA(invoices: yearInvoices), specifier: "%.2f")")
+                                        Text("$\(summary.totalCreditIVADouble, specifier: "%.2f")")
                                             .foregroundColor(.green)
                                     }
                                     
@@ -52,7 +49,7 @@ struct BalanceView: View {
                                         Text("Total IVA Débito:")
                                             .foregroundStyle(Color("LDBrownColor"))
                                         Spacer()
-                                        Text("$\(viewModel.totalDebitIVA(invoices: yearInvoices), specifier: "%.2f")")
+                                        Text("$\(summary.totalDebitIVADouble, specifier: "%.2f")")
                                             .foregroundColor(.red)
                                     }
 
@@ -60,9 +57,9 @@ struct BalanceView: View {
                                         Text("Balance Neto de IVA:")
                                             .foregroundStyle(Color("LDBrownColor"))
                                         Spacer()
-                                        Text("$\(viewModel.netIVA(invoices: yearInvoices), specifier: "%.2f")")
+                                        Text("$\(summary.netIVADouble, specifier: "%.2f")")
                                             .fontWeight(.bold)
-                                            .foregroundColor(viewModel.netIVA(invoices: yearInvoices) >= 0 ? .green : .red)
+                                            .foregroundColor(summary.netIVADouble >= 0 ? .green : .red)
                                     }
                                 }
                             }
@@ -83,17 +80,10 @@ struct BalanceView: View {
             }
         }
         .onAppear {
-            // Obtener el año corriente
-            let currentYear = Calendar.current.component(.year, from: Date())
-            // Convertir el año a string
-            let currentYearString = String(currentYear)
-            // Establecer el año seleccionado al corriente si existe en los datos
-            if groupedInvoices.keys.contains(currentYearString) {
-                selectedYear = currentYearString
-            } else {
-                // Si el año actual no está disponible, seleccionar el primer año disponible
-                selectedYear = groupedInvoices.keys.sorted().first ?? ""
-            }
+            selectedYear = viewModel.defaultSelectedYear(from: invoices, preferredYear: selectedYear)
+        }
+        .onChange(of: invoices.count) { _, _ in
+            selectedYear = viewModel.defaultSelectedYear(from: invoices, preferredYear: selectedYear)
         }
     }
 }

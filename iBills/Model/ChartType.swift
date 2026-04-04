@@ -10,14 +10,14 @@ import Foundation
 
 enum ChartType: CaseIterable {
     case credit
-    case difference
+    case balance
     case debit
     
     
     var title: String {
         switch self {
         case .credit: return "Crédito"
-        case .difference: return "Diferencia"
+        case .balance: return "Balance"
         case .debit: return "Débito"
         }
     }

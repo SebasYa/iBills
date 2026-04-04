@@ -57,16 +57,22 @@ struct HomeView: View {
                         .listRowBackground(Color.clear)
 
                         if viewModel.searchText.isEmpty {
-                            let groupedInvoices = viewModel.groupInvoicesByYear(invoices: invoices)
+                            let groupedInvoices = viewModel.groupedInvoices(byYearFrom: invoices)
                             Section(header: HStack {
                                 Spacer()
                                 Text("Facturas por Año")
                                 Spacer()
                             }) {
-                                ForEach(groupedInvoices.keys.sorted(), id: \.self) { year in
+                                ForEach(viewModel.sortedYears(from: invoices), id: \.self) { year in
                                     DisclosureGroup(year) {
                                         ForEach(groupedInvoices[year] ?? []) { invoice in
-                                            InvoiceRow(invoice: invoice, disableSwipe: viewModel.isDeleteYearMode)
+                                            InvoiceRowView(
+                                                invoice: invoice,
+                                                disableSwipe: viewModel.isDeleteYearMode,
+                                                onDelete: { invoice in
+                                                    viewModel.deleteInvoice(invoice)
+                                                }
+                                            )
                                         }
                                         .listRowBackground(Color.black.opacity(0.2))
                                     }
@@ -88,12 +94,23 @@ struct HomeView: View {
                         } else {
                             // Filtered invoices section
                             Section(header: Text("Resultados de Búsqueda")) {
-                                ForEach(viewModel.filteredInvoices(invoices: invoices)) { invoice in
-                                    InvoiceRow(invoice: invoice, disableSwipe: false)
+                                ForEach(viewModel.filteredInvoices(from: invoices)) { invoice in
+                                    InvoiceRowView(
+                                        invoice: invoice,
+                                        disableSwipe: false,
+                                        onDelete: { invoice in
+                                            viewModel.deleteInvoice(invoice)
+                                        }
+                                    )
                                 }
                             }
                             .listRowBackground(Color.black.opacity(0.2))
                         }
+                    }
+                    .alert("Error", isPresented: $viewModel.showErrorAlert) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text(viewModel.errorMessage ?? "Ocurrió un error inesperado.")
                     }
                     .scrollContentBackground(.hidden)
                     .background(Color.clear)
@@ -109,15 +126,8 @@ struct HomeView: View {
                             triggerSwipeAnimation()
                         }
                     }) {
-                        HStack {
-                            VStack {
-                                Image(systemName: viewModel.isDeleteYearMode ? "checkmark.circle" : "trash")
-                                    .foregroundStyle(Color.primary)
-                                Text(viewModel.isDeleteYearMode ? "Terminar" : "Eliminar Años")
-                                    .foregroundStyle(Color.primary)
-                            }
-                        }
-
+                        Image(systemName: viewModel.isDeleteYearMode ? "checkmark.circle" : "trash")
+                            .foregroundStyle(Color.primary)
                     }
                 }
             }
@@ -127,7 +137,7 @@ struct HomeView: View {
                     message: Text("¿Está seguro de que desea eliminar todas las facturas del año \(viewModel.yearToDelete ?? "")? Esta acción no se puede deshacer."),
                     primaryButton: .destructive(Text("Eliminar")) {
                         if let year = viewModel.yearToDelete {
-                            viewModel.deleteYearInvoices(from: year, invoicesByYear: viewModel.groupInvoicesByYear(invoices: invoices), context: context)
+                            viewModel.deleteYearInvoices(from: year, invoices: invoices)
                         }
                     },
                     secondaryButton: .cancel()
@@ -136,6 +146,9 @@ struct HomeView: View {
             .sheet(isPresented: $viewModel.showAddBill) {
                 AddInvoiceView()
                     .environment(\.modelContext, context)
+            }
+            .onAppear {
+                viewModel.setContext(context)
             }
         }
     }
@@ -157,71 +170,3 @@ struct HomeView: View {
     HomeView()
 }
 
-struct InvoiceRow: View {
-    @Environment(\.modelContext) private var context
-    @State private var showDeleteInvoiceAlert = false
-    var invoice: Invoice
-    var disableSwipe: Bool
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Razón Social:")
-                Text("\(invoice.razonSocial)")
-                    .foregroundStyle(Color("RazonSocialColor"))
-            }
-            Text("Es Crédito: \(invoice.isCredit ? "Sí" : "No")")
-            if let numeroFactura = invoice.numeroFactura {
-                Text("Número de Factura: \(numeroFactura)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            Text("IVA: $\(invoice.vatRate, specifier: "%.1f")%")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Text("Monto Total: $\(invoice.amount, specifier: "%.2f")")
-                .foregroundStyle(Color("GreenMontoColor"))
-            Text("Monto Neto: $\(invoice.netAmount, specifier: "%.2f")")
-                .foregroundStyle(Color("GreenMontoColor"))
-            Text("IVA Discriminado: $\(invoice.iva, specifier: "%.2f")")
-                .foregroundStyle(Color("FullRedColor"))
-            Text("Fecha: \(invoice.date, style: .date)")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
-        .padding()
-        .cornerRadius(10)
-        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            if !disableSwipe {
-                Button(role: .destructive) {
-                    showDeleteInvoiceAlert = true
-                } label: {
-                    Label("Eliminar\nFactura", systemImage: "trash")
-                }
-            }
-        }
-        .alert(isPresented: $showDeleteInvoiceAlert) {
-            Alert(
-                title: Text("Eliminar Factura"),
-                message: Text("¿Está seguro de que desea eliminar esta factura?"),
-                primaryButton: .destructive(Text("Eliminar")) {
-                    deleteInvoice(invoice)
-                },
-                secondaryButton: .cancel()
-            )
-        }
-    }
-
-    private func deleteInvoice(_ invoice: Invoice) {
-        context.delete(invoice)
-        saveContext()
-    }
-
-    private func saveContext() {
-        do {
-            try context.save()
-        } catch {
-            print("Error al guardar el contexto: \(error.localizedDescription)")
-        }
-    }
-}
