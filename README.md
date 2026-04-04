@@ -1,75 +1,129 @@
 # iBills - Invoice Management
 
 <div align="center">
-<img src="https://github.com/SebasYa/iBills/blob/main/iBills/Assets.xcassets/AppIcon.appiconset/IVA.png" alt="App Icon" width="300">
+  <img src="https://github.com/SebasYa/iBills/blob/main/iBills/Assets.xcassets/AppIcon.appiconset/IVA.png" alt="App Icon" width="300">
 </div>
 
-- ![Swift](https://img.shields.io/badge/Swift-FA7343?style=for-the-badge&logo=swift&logoColor=white&style=flat)
-- ![SwiftUI](https://img.shields.io/badge/SwiftUI-000000?style=for-the-badge&logo=swift&logoColor=white&style=flat)
-- ![Xcode](https://img.shields.io/badge/Xcode-1575F9?style=for-the-badge&logo=xcode&logoColor=white&style=flat)
-- ![Chart](https://img.shields.io/badge/Chart-00BFFF?style=for-the-badge&logo=chart&logoColor=white&style=flat)
-- ![Swift Data](https://img.shields.io/badge/Swift%20Data-FF5C5C?style=for-the-badge&logo=swift&logoColor=white&style=flat)
+<div align="center">
 
-## Description
+![Swift](https://img.shields.io/badge/Swift-FA7343?style=for-the-badge&logo=swift&logoColor=white&style=flat)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-000000?style=for-the-badge&logo=swift&logoColor=white&style=flat)
+![Xcode](https://img.shields.io/badge/Xcode-1575F9?style=for-the-badge&logo=xcode&logoColor=white&style=flat)
+![Charts](https://img.shields.io/badge/Charts-00BFFF?style=for-the-badge&style=flat)
+![SwiftData](https://img.shields.io/badge/Swift%20Data-FF5C5C?style=for-the-badge&logo=swift&logoColor=white&style=flat)
 
-iBills is a comprehensive invoice management application designed for handling and tracking invoices with precision. The app allows users to manage and view invoices, including detailed information on VAT (IVA in Argentina), with an interactive graphical interface. 
+</div>
 
-We are utilizing the beta version of iOS 18 and the feature to enhance user experience and animation transitions. The latest Swift Data framework is also employed to manage invoices efficiently.
+## Overview
+
+iBills is a modern iOS invoice management app built with **SwiftUI** and **SwiftData**, focused on tracking invoices and automatically breaking down **VAT (IVA in Argentina)**.
+
+The app helps users register invoices, organize them by year and month, analyze **VAT Credit vs VAT Debit**, and visualize yearly tax movement through interactive charts. It is designed as a **local-first** experience, with on-device persistence and biometric/device authentication for a more realistic finance-oriented workflow.
 
 <img src="https://github.com/SebasYa/iBills/blob/main/iBillGif.gif" alt="App Demo" width="260"/> <img src="https://github.com/SebasYa/iBills/blob/main/iBillsGif2.gif" alt="App Demo" width="270"/>
 
+## Why This Project
+
+This project was built to showcase:
+
+- A complete **end-to-end iOS app** experience
+- Clean architecture with **Model / View / ViewModel / Service**
+- Real-world usage of **SwiftData** for local persistence
+- Financial data handling with automatic **VAT and net amount calculation**
+- Interactive data visualization with **Apple Charts**
+- Secure access using **LocalAuthentication**
+- Strong UX details such as empty states, search, grouping, confirmations, and bulk deletion flows
 
 ## Features
 
-- **Invoice Management**: Add, edit, and delete invoices with ease.
-- **VAT Tracking**: Discriminate VAT values and view detailed summaries (IVA in Argentina).
-- **Interactive Charts**: Visualize your data with interactive charts for better insights.
-- **Yearly VAT Balancing**: Track VAT balance by year to determine if there is VAT to be paid or to your favor.
-- **Easy Deletion**: Remove invoices individually or delete all invoices for a year simply and conveniently.
-- **Swift Data Integration**: Manage invoice data using the latest Swift Data framework.
-- **User-Friendly Interface**: Intuitive design for smooth navigation and usage.
+- **Invoice Management**: Add and delete invoices with a streamlined mobile workflow.
+- **Automatic VAT Breakdown**: Calculate net amount and VAT from the total invoice amount.
+- **VAT Tracking**: Separate and visualize **VAT Credit** and **VAT Debit**.
+- **Yearly VAT Balancing**: Check whether the selected year results in VAT payable or a favorable technical balance.
+- **Interactive Charts**: Explore VAT movement over time with yearly interactive charts.
+- **Grouped History**: Browse invoices organized by **year** and **month**.
+- **Search Support**: Filter invoices by **business name** or **invoice number**.
+- **Bulk Deletion**: Remove a single invoice, a full month, or an entire year with confirmation dialogs.
+- **Biometric / Device Authentication**: Protect access using Face ID, Touch ID, or device passcode.
+- **SwiftData Integration**: Store all invoice data locally on-device.
+- **Polished SwiftUI Interface**: Custom tab bar, card-based layout, and focused navigation across screens.
+
+## Main Screens
+
+### Home
+The main screen for day-to-day usage. Users can add invoices, browse grouped history, search records, and manage deletion flows.
+
+### Balance
+Displays yearly VAT totals, including:
+
+- VAT Credit
+- VAT Debit
+- Net VAT Balance
+- Invoice count
+- Purchases vs sales count
+- Average VAT
+- Net taxable base by category
+
+### Graphs
+Provides interactive yearly visualization for:
+
+- VAT Credit
+- VAT Debit
+- VAT Balance
+
+Users can inspect daily points and view a summary of the selected period, including latest accumulated value, peak value, and number of movement days.
+
+### Authentication
+The app opens behind local authentication, making the experience feel more aligned with a finance/productivity app handling sensitive information.
+
+## Architecture
+
+The project follows a clean separation of responsibilities using a SwiftUI + MVVM-style structure with dedicated service layers for business logic, persistence, analytics, and authentication.
+
+### Project Structure
+
+```text
+iBills/
+├── Model/
+├── Service/
+├── View/
+│   ├── Home/
+│   ├── Balance/
+│   └── Graph/
+└── ViewModel/
+```
+
+
+## Supported VAT Rates
+
+The app currently supports:
+
+- `27%`
+- `21%`
+- `10.5%`
+
+## Tech Stack
+
+- **Swift 5**
+- **SwiftUI**
+- **SwiftData**
+- **Charts**
+- **LocalAuthentication**
+- **Xcode 16+**
+- **iOS 18.0+**
 
 ## Requirements
 
-- **Xcode**: Requires Xcode 16 Beta or later.
-- **iOS**: To test on a physical device, you need iOS 18 Beta or later.
+- **Xcode**: 16 or later
+- **iOS**: 18.0 or later
+- A simulator or physical device compatible with iOS 18
+- Biometrics or device passcode configured if you want to fully test authentication behavior
 
 ## Installation
 
 1. **Clone the repository**:
 
-    ```bash
-    git clone https://github.com/SebasYa/iBills.git
-    ```
+   ```bash
+   git clone https://github.com/SebasYa/iBills.git
 
-2. **Open the project in Xcode**:
-    - Navigate to the cloned project directory and open `iBills.xcodeproj`.
-
-3. **Run the application**:
-    - Select your target device and run the application.
-
-## Usage
-
-1. **App Launch**:
-    - On launching the app, you will see the main screen where you can view and manage your invoices.
-
-2. **Managing Invoices**:
-    - Add new invoices, edit existing ones, and delete individually or remove all invoices from a specific year as needed. 
-
-3. **VAT Tracking**:
-    - View detailed VAT information and track VAT balance for each year. 
-
-4. **Interactive Charts**:
-    - Use the interactive charts to gain insights into your invoice data.
-
-
-## Contribution
-
-Contributions are welcome! If you would like to contribute to this project, please follow these steps:
-
-1. **Fork the repository**.
-2. **Create a branch** for your feature (`git checkout -b feature/new-feature`).
-3. **Make your changes** and commit them (`git commit -m 'Add new feature'`).
-4. **Push your changes** to your fork (`git push origin feature/new-feature`).
-5. **Create a Pull Request** on GitHub.
 
