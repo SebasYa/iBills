@@ -68,7 +68,6 @@ struct InvoiceRowView: View {
                 )
             }
             .padding(.leading, 10)
-            .padding(.top, 10)
 
             HStack(spacing: 12) {
                 InvoiceMetricItemView(
@@ -81,7 +80,7 @@ struct InvoiceRowView: View {
                     value: InvoiceDisplayFormatter.currency(invoice.ivaDecimal)
                 )
             }
-
+            .padding(.top, -5)
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
