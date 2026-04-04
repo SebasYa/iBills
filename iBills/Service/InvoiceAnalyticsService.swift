@@ -28,6 +28,24 @@ struct VATBalanceSummary {
     }
 }
 
+struct InvoiceYearSection: Identifiable {
+    let year: String
+    let invoiceCount: Int
+    let totalAmount: Decimal
+    let months: [InvoiceMonthSection]
+
+    var id: String { year }
+}
+
+struct InvoiceMonthSection: Identifiable {
+    let year: String
+    let month: Int
+    let title: String
+    let invoices: [Invoice]
+
+    var id: String { "\(year)-\(month)" }
+}
+
 struct InvoiceChartData {
     let groupedInvoices: [Date: [Invoice]]
     let dates: [Date]
@@ -48,6 +66,8 @@ protocol InvoiceAnalyticsProviding {
     func availableYears(invoices: [Invoice]) -> [String]
     func defaultSelectedYear(from invoices: [Invoice], preferredYear: String?) -> String?
     func groupInvoicesByYear(_ invoices: [Invoice]) -> [String: [Invoice]]
+    func invoices(in year: String, month: Int?, from invoices: [Invoice]) -> [Invoice]
+    func makeHomeSections(from invoices: [Invoice]) -> [InvoiceYearSection]
     func filterInvoices(_ invoices: [Invoice], searchText: String) -> [Invoice]
     func makeBalanceSummary(for invoices: [Invoice]) -> VATBalanceSummary
     func chartData(for year: String, invoices: [Invoice]) -> InvoiceChartData
@@ -55,9 +75,14 @@ protocol InvoiceAnalyticsProviding {
 
 struct InvoiceAnalyticsService: InvoiceAnalyticsProviding {
     private let calendar: Calendar
+    private let locale: Locale
 
-    init(calendar: Calendar = .current) {
+    init(
+        calendar: Calendar = .current,
+        locale: Locale = Locale(identifier: "es_AR")
+    ) {
         self.calendar = calendar
+        self.locale = locale
     }
 
     func availableYears(invoices: [Invoice]) -> [String] {
@@ -90,6 +115,57 @@ struct InvoiceAnalyticsService: InvoiceAnalyticsProviding {
         .mapValues { yearlyInvoices in
             yearlyInvoices.sorted { $0.date > $1.date }
         }
+    }
+
+    func invoices(in year: String, month: Int? = nil, from invoices: [Invoice]) -> [Invoice] {
+        invoices
+            .filter { invoice in
+                yearString(from: invoice.date) == year &&
+                (month == nil || calendar.component(.month, from: invoice.date) == month)
+            }
+            .sorted { $0.date > $1.date }
+    }
+
+    func makeHomeSections(from invoices: [Invoice]) -> [InvoiceYearSection] {
+        let groupedByYear = Dictionary(grouping: invoices) { invoice in
+            calendar.component(.year, from: invoice.date)
+        }
+
+        return groupedByYear.keys
+            .sorted(by: >)
+            .map { year in
+                let yearInvoices = groupedByYear[year, default: []]
+                    .sorted { $0.date > $1.date }
+
+                let groupedByMonth = Dictionary(grouping: yearInvoices) { invoice in
+                    calendar.component(.month, from: invoice.date)
+                }
+
+                let months = groupedByMonth.keys
+                    .sorted(by: >)
+                    .map { month in
+                        let invoicesForMonth = groupedByMonth[month, default: []]
+                            .sorted { $0.date > $1.date }
+
+                        return InvoiceMonthSection(
+                            year: String(year),
+                            month: month,
+                            title: monthTitle(for: month, year: year),
+                            invoices: invoicesForMonth
+                        )
+                    }
+
+                let totalAmount = yearInvoices.reduce(Decimal.zero) { partialResult, invoice in
+                    partialResult + invoice.amountDecimal
+                }
+
+                return InvoiceYearSection(
+                    year: String(year),
+                    invoiceCount: yearInvoices.count,
+                    totalAmount: InvoiceDecimal.money(from: totalAmount),
+                    months: months
+                )
+            }
     }
 
     func filterInvoices(_ invoices: [Invoice], searchText: String) -> [Invoice] {
@@ -180,5 +256,22 @@ struct InvoiceAnalyticsService: InvoiceAnalyticsProviding {
 
     private func yearString(from date: Date) -> String {
         String(calendar.component(.year, from: date))
+    }
+
+    private func monthTitle(for month: Int, year: Int) -> String {
+        var components = DateComponents()
+        components.year = year
+        components.month = month
+        components.day = 1
+
+        guard let date = calendar.date(from: components) else {
+            return String(month)
+        }
+
+        let formatter = DateFormatter()
+        formatter.calendar = calendar
+        formatter.locale = locale
+        formatter.dateFormat = "LLLL"
+        return formatter.string(from: date).capitalized
     }
 }

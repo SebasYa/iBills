@@ -8,16 +8,57 @@
 import SwiftUI
 import SwiftData
 
+enum HomeDeleteTarget {
+    case invoice(Invoice)
+    case year(String)
+    case month(year: String, month: Int, title: String)
+
+    var title: String {
+        switch self {
+        case .invoice:
+            "Eliminar factura"
+        case .year:
+            "Eliminar facturas del año"
+        case .month:
+            "Eliminar facturas del mes"
+        }
+    }
+
+    var buttonTitle: String {
+        switch self {
+        case .invoice:
+            "Eliminar factura"
+        case let .year(year):
+            "Eliminar \(year)"
+        case let .month(_, _, title):
+            "Eliminar \(title)"
+        }
+    }
+
+    var message: String {
+        switch self {
+        case let .invoice(invoice):
+            if let numeroFactura = invoice.numeroFactura, !numeroFactura.isEmpty {
+                "Esta acción elimina la factura \(numeroFactura) de \(invoice.razonSocial) y no se puede deshacer."
+            } else {
+                "Esta acción elimina la factura de \(invoice.razonSocial) y no se puede deshacer."
+            }
+        case let .year(year):
+            "Esta acción elimina todas las facturas de \(year) y no se puede deshacer."
+        case let .month(year, _, title):
+            "Esta acción elimina todas las facturas de \(title) \(year) y no se puede deshacer."
+        }
+    }
+}
+
 @MainActor
 final class HomeViewModel: ObservableObject {
     @Published var showAddBill = false
     @Published var searchText = ""
-    @Published var showDeleteAlert = false
     @Published var showErrorAlert = false
-    @Published var yearToDelete: String?
     @Published var errorMessage: String?
     @Published var isDeleteYearMode = false
-    @Published var isAnimatingSwipe = false
+    @Published var deleteTarget: HomeDeleteTarget?
 
     private let analyticsService: InvoiceAnalyticsProviding
     private var invoiceStore: InvoiceStoring?
@@ -30,26 +71,52 @@ final class HomeViewModel: ObservableObject {
         invoiceStore = SwiftDataInvoiceStore(context: context)
     }
 
-    func groupedInvoices(byYearFrom invoices: [Invoice]) -> [String: [Invoice]] {
-        analyticsService.groupInvoicesByYear(invoices)
+    func homeSections(from invoices: [Invoice]) -> [InvoiceYearSection] {
+        let filteredInvoices = analyticsService.filterInvoices(invoices, searchText: searchText)
+        return analyticsService.makeHomeSections(from: filteredInvoices)
     }
 
-    func sortedYears(from invoices: [Invoice]) -> [String] {
-        analyticsService.availableYears(invoices: invoices)
+    func allHomeSections(from invoices: [Invoice]) -> [InvoiceYearSection] {
+        analyticsService.makeHomeSections(from: invoices)
     }
 
-    func filteredInvoices(from invoices: [Invoice]) -> [Invoice] {
-        analyticsService.filterInvoices(invoices, searchText: searchText)
+    func requestDeleteYear(_ year: String) {
+        deleteTarget = .year(year)
     }
 
-    func deleteYearInvoices(from year: String, invoices: [Invoice]) {
+    func requestDeleteMonth(year: String, month: Int, title: String) {
+        deleteTarget = .month(year: year, month: month, title: title)
+    }
+
+    func requestDeleteInvoice(_ invoice: Invoice) {
+        deleteTarget = .invoice(invoice)
+    }
+
+    func clearDeleteTarget() {
+        deleteTarget = nil
+    }
+
+    func confirmDeletion(from invoices: [Invoice]) {
         guard let invoiceStore else {
             presentError("No se pudo acceder al almacenamiento de facturas.")
             return
         }
 
-        let invoicesByYear = analyticsService.groupInvoicesByYear(invoices)
-        let invoicesToDelete = invoicesByYear[year, default: []]
+        guard let deleteTarget else {
+            return
+        }
+
+        clearDeleteTarget()
+
+        let invoicesToDelete: [Invoice]
+        switch deleteTarget {
+        case let .invoice(invoice):
+            invoicesToDelete = [invoice]
+        case let .year(year):
+            invoicesToDelete = analyticsService.invoices(in: year, month: nil, from: invoices)
+        case let .month(year, month, _):
+            invoicesToDelete = analyticsService.invoices(in: year, month: month, from: invoices)
+        }
 
         guard !invoicesToDelete.isEmpty else {
             return
@@ -57,22 +124,8 @@ final class HomeViewModel: ObservableObject {
 
         do {
             try invoiceStore.delete(invoicesToDelete)
-            yearToDelete = nil
         } catch {
-            presentError("No se pudieron eliminar las facturas del año \(year). \(error.localizedDescription)")
-        }
-    }
-
-    func deleteInvoice(_ invoice: Invoice) {
-        guard let invoiceStore else {
-            presentError("No se pudo acceder al almacenamiento de facturas.")
-            return
-        }
-
-        do {
-            try invoiceStore.delete(invoice)
-        } catch {
-            presentError("No se pudo eliminar la factura. \(error.localizedDescription)")
+            presentError("No se pudieron eliminar las facturas. \(error.localizedDescription)")
         }
     }
 

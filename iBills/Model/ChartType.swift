@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ChartType: CaseIterable {
+enum ChartType: CaseIterable, Hashable {
     case credit
     case balance
     case debit

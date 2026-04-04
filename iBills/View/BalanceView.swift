@@ -9,81 +9,75 @@ import SwiftUI
 import SwiftData
 
 struct BalanceView: View {
-    @Query private var invoices: [Invoice]
+    @Query(sort: \Invoice.date, order: .reverse) private var invoices: [Invoice]
     @StateObject private var viewModel = BalanceViewModel()
+    @State private var selectedYear = ""
 
-    @State private var selectedYear: String = ""
+    private var availableYears: [String] {
+        viewModel.availableYears(from: invoices)
+    }
+
+    private var displayedYear: String {
+        viewModel.defaultSelectedYear(
+            from: invoices,
+            preferredYear: selectedYear.isEmpty ? nil : selectedYear
+        )
+    }
+
+    private var displayedYearBinding: Binding<String> {
+        Binding(
+            get: { displayedYear },
+            set: { selectedYear = $0 }
+        )
+    }
+
+    private var selectedYearInvoices: [Invoice] {
+        viewModel.invoices(for: displayedYear, from: invoices)
+    }
+
+    private var summary: VATBalanceSummary {
+        viewModel.summary(for: selectedYearInvoices)
+    }
+
+    private var insights: BalanceInsights {
+        viewModel.insights(for: selectedYearInvoices, summary: summary)
+    }
 
     var body: some View {
-        let groupedInvoices = viewModel.groupedInvoices(byYearFrom: invoices)
-        let availableYears = viewModel.availableYears(from: invoices)
-        let selectedYearInvoices = groupedInvoices[selectedYear] ?? []
-        let summary = viewModel.summary(for: selectedYearInvoices)
-
-        NavigationView {
+        NavigationStack {
             ZStack {
                 LinearGradient(
-                    gradient: Gradient(colors: [Color.yellow.opacity(0.6), Color.brown.opacity(0.2)]),
-                    startPoint: .top,
-                    endPoint: .bottom
+                    gradient: Gradient(colors: [Color.purple.opacity(0.35), Color.brown.opacity(0.82)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
 
-                VStack {
-                    // Year selection buttons
-                    YearButtonsView(years: availableYears, selectedYear: $selectedYear)
-                    
-                    if !selectedYearInvoices.isEmpty  {
-                        Form {
-                            Section(header: Text("Balance de IVA \(selectedYear)")) {
-                                VStack(alignment: .leading, spacing: 16) {
-                                    HStack {
-                                        Text("Total IVA Crédito:")
-                                            .foregroundStyle(Color("LDBrownColor"))
-                                        Spacer()
-                                        Text("$\(summary.totalCreditIVADouble, specifier: "%.2f")")
-                                            .foregroundColor(.green)
-                                    }
-                                    
-                                    HStack {
-                                        Text("Total IVA Débito:")
-                                            .foregroundStyle(Color("LDBrownColor"))
-                                        Spacer()
-                                        Text("$\(summary.totalDebitIVADouble, specifier: "%.2f")")
-                                            .foregroundColor(.red)
-                                    }
+                ScrollView {
+                    VStack(spacing: 16) {
+                        if availableYears.isEmpty {
+                            BalanceEmptyStateCard()
+                        } else {
+                            HomeBalanceSummaryCard(
+                                years: availableYears,
+                                selectedYear: displayedYearBinding,
+                                invoiceCount: selectedYearInvoices.count,
+                                summary: summary
+                            )
 
-                                    HStack {
-                                        Text("Balance Neto de IVA:")
-                                            .foregroundStyle(Color("LDBrownColor"))
-                                        Spacer()
-                                        Text("$\(summary.netIVADouble, specifier: "%.2f")")
-                                            .fontWeight(.bold)
-                                            .foregroundColor(summary.netIVADouble >= 0 ? .green : .red)
-                                    }
-                                }
-                            }
-                            .listRowBackground(Color.gray.opacity(0.3))
+                            BalanceInsightsSection(insights: insights)
                         }
-                        .foregroundStyle(Color("BWColor"))
-                        .scrollContentBackground(.hidden)
-                        .background(Color.clear)
-                    } else {
-                        Text("Ingresa Facturas para generar un Balance")
-                            .foregroundColor(.gray)
-                            .padding()
-                        Spacer()
+
+                        ScrollBottomSpacer()
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 12)
                 }
-                .navigationTitle("Balance de IVA")
-                .safeAreaPadding(.bottom, 5)
+                .safeAreaPadding(.top, 8)
+                .scrollIndicators(.hidden)
             }
-        }
-        .onAppear {
-            selectedYear = viewModel.defaultSelectedYear(from: invoices, preferredYear: selectedYear)
-        }
-        .onChange(of: invoices.count) { _, _ in
-            selectedYear = viewModel.defaultSelectedYear(from: invoices, preferredYear: selectedYear)
+            .navigationTitle("Balance de IVA")
+            .safeAreaPadding(.bottom, 5)
         }
     }
 }

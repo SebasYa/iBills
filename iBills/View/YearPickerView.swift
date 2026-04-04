@@ -13,33 +13,34 @@ struct YearPickerView: View {
     
     var body: some View {
         if !viewModel.invoices.isEmpty {
-            HStack(spacing: 10) {
-                
-                ForEach(viewModel.availableYears, id: \.self) { year in
-                    
-                    Button {
-                        viewModel.selectYear(year)
-                    } label: {
-                        Text(year)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background {
-                                if viewModel.selectedYear == year {
-                                    Capsule()
-                                        .fill(Color.blue.gradient)
-                                        .matchedGeometryEffect(id: "SELECTED_YEAR", in: animation)
-                                } else {
-                                    Capsule()
-                                        .fill(Color.clear)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 10) {
+                    ForEach(viewModel.availableYears, id: \.self) { year in
+                        Button {
+                            viewModel.selectYear(year)
+                        } label: {
+                            Text(year)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background {
+                                    if viewModel.selectedYear == year {
+                                        Capsule()
+                                            .fill(Color.blue.gradient)
+                                            .matchedGeometryEffect(id: "SELECTED_YEAR", in: animation)
+                                    } else {
+                                        Capsule()
+                                            .fill(Color.clear)
+                                    }
                                 }
-                            }
-                            .foregroundStyle(viewModel.selectedYear == year ? .white : .gray.opacity(0.9))
+                                .foregroundStyle(viewModel.selectedYear == year ? .white : .gray.opacity(0.9))
+                        }
+                        .buttonStyle(.plain)
+                        .animation(.smooth(duration: 0.3, extraBounce: 0), value: viewModel.selectedYear)
                     }
-                    .buttonStyle(.plain)
-                    .animation(.smooth(duration: 0.3, extraBounce: 0), value: viewModel.selectedYear)
                 }
+                .padding(.horizontal, 2)
             }
-            .coordinateSpace(.named("TABBARVIEW"))
             .padding(.horizontal, 5)
             .frame(height: 45)
             .background(
@@ -61,5 +62,10 @@ struct YearPickerView: View {
 }
 
 #Preview {
-    GraphView()
+    ZStack {
+        Color.green.opacity(0.15)
+            .ignoresSafeArea()
+        YearPickerView(viewModel: GraphViewModel(invoices: PreviewFixtures.invoices()))
+            .padding()
+    }
 }

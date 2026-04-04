@@ -10,138 +10,159 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) private var context
-    @Query private var invoices: [Invoice]
-    
-    @StateObject private var viewModel = HomeViewModel()
+    @Query(sort: \Invoice.date, order: .reverse) private var invoices: [Invoice]
 
+    @StateObject private var viewModel = HomeViewModel()
+    @State private var isSearchPresented = false
+    @State private var expandedYears: Set<String> = []
+    @State private var expandedMonths: Set<String> = []
+
+    private var visibleSections: [InvoiceYearSection] {
+        viewModel.homeSections(from: invoices)
+    }
+
+    private var allSections: [InvoiceYearSection] {
+        viewModel.allHomeSections(from: invoices)
+    }
+
+    private var allYearIDs: [String] {
+        allSections.map(\.id)
+    }
+
+    private var allMonthIDs: [String] {
+        allSections.flatMap { $0.months.map(\.id) }
+    }
+
+    private var isSearching: Bool {
+        !viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private var shouldShowSearchField: Bool {
+        isSearchPresented || isSearching
+    }
+
+    private var isShowingDeleteConfirmation: Binding<Bool> {
+        Binding(
+            get: { viewModel.deleteTarget != nil },
+            set: { isPresented in
+                if !isPresented {
+                    viewModel.clearDeleteTarget()
+                }
+            }
+        )
+    }
+
+    init() {
+        _invoices = Query(sort: \Invoice.date, order: .reverse)
+    }
+
+    @ViewBuilder
     var body: some View {
-        NavigationView {
+        if shouldShowSearchField {
+            homeContent
+                .searchable(
+                    text: $viewModel.searchText,
+                    isPresented: $isSearchPresented,
+                    placement: .navigationBarDrawer(displayMode: .automatic),
+                    prompt: "Razón social o número de factura",
+                )
+        } else {
+            homeContent
+        }
+    }
+
+    private var homeContent: some View {
+        NavigationStack {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [Color.brown, Color.brown.opacity(0.2)]),
-                    startPoint: .top,
-                    endPoint: .bottom
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
 
-                VStack {
-                    // Button to add a new invoice
-                    Button(action: {
-                        viewModel.showAddBill.toggle()
+                HomeContentListView(
+                    isSearching: isSearching,
+                    visibleSections: visibleSections,
+                    isDeleteMode: viewModel.isDeleteYearMode,
+                    yearBinding: { yearSection in
+                        bindingForYear(yearSection.id)
+                    },
+                    monthBinding: { monthSection in
+                        bindingForMonth(monthSection.id)
+                    },
+                    onAddInvoice: {
+                        viewModel.showAddBill = true
                         viewModel.isDeleteYearMode = false
-                    }) {
-                        Label("Agregar Factura", systemImage: "plus.circle")
-                            .font(.title2)
-                            .padding()
-                            .frame(maxWidth: 350)
-                            .background(Color.green.opacity(0.6))
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                    },
+                    onDeleteYear: { yearSection in
+                        viewModel.requestDeleteYear(yearSection.year)
+                    },
+                    onDeleteMonth: { monthSection in
+                        viewModel.requestDeleteMonth(
+                            year: monthSection.year,
+                            month: monthSection.month,
+                            title: monthSection.title
+                        )
+                    },
+                    onDeleteInvoice: { invoice in
+                        viewModel.requestDeleteInvoice(invoice)
                     }
-
-                    Form {
-                        Section(header: HStack {
-                            Spacer()
-                            Text("Buscar Facturas")
-                            Spacer()
-                        }) {
-                            TextField("Razón Social o Número de Factura", text: $viewModel.searchText)
-                                .foregroundStyle(Color.white)
-                                .padding(8)
-                                .background(Color.black.opacity(0.2))
-                                .cornerRadius(8)
-                        }
-                        .onChange(of: viewModel.searchText) { _, _ in
-                            viewModel.isDeleteYearMode = false
-                        }
-                        .listRowBackground(Color.clear)
-
-                        if viewModel.searchText.isEmpty {
-                            let groupedInvoices = viewModel.groupedInvoices(byYearFrom: invoices)
-                            Section(header: HStack {
-                                Spacer()
-                                Text("Facturas por Año")
-                                Spacer()
-                            }) {
-                                ForEach(viewModel.sortedYears(from: invoices), id: \.self) { year in
-                                    DisclosureGroup(year) {
-                                        ForEach(groupedInvoices[year] ?? []) { invoice in
-                                            InvoiceRowView(
-                                                invoice: invoice,
-                                                disableSwipe: viewModel.isDeleteYearMode,
-                                                onDelete: { invoice in
-                                                    viewModel.deleteInvoice(invoice)
-                                                }
-                                            )
-                                        }
-                                        .listRowBackground(Color.black.opacity(0.2))
-                                    }
-                                    .offset(x: viewModel.isAnimatingSwipe && viewModel.isDeleteYearMode ? -30 : 0)
-                                    .listRowBackground(Color.black.opacity(0.2))
-                                    // Swipe action to delete the entire year
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                        if viewModel.isDeleteYearMode {
-                                            Button(role: .destructive) {
-                                                viewModel.yearToDelete = year
-                                                viewModel.showDeleteAlert = true
-                                            } label: {
-                                                Label("Eliminar Año", systemImage: "trash")
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            // Filtered invoices section
-                            Section(header: Text("Resultados de Búsqueda")) {
-                                ForEach(viewModel.filteredInvoices(from: invoices)) { invoice in
-                                    InvoiceRowView(
-                                        invoice: invoice,
-                                        disableSwipe: false,
-                                        onDelete: { invoice in
-                                            viewModel.deleteInvoice(invoice)
-                                        }
-                                    )
-                                }
-                            }
-                            .listRowBackground(Color.black.opacity(0.2))
-                        }
-                    }
-                    .alert("Error", isPresented: $viewModel.showErrorAlert) {
-                        Button("OK", role: .cancel) {}
-                    } message: {
-                        Text(viewModel.errorMessage ?? "Ocurrió un error inesperado.")
-                    }
-                    .scrollContentBackground(.hidden)
-                    .background(Color.clear)
-                }
-                Spacer()
+                )
             }
             .navigationTitle("Facturas")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        viewModel.isDeleteYearMode.toggle()
-                        if viewModel.isDeleteYearMode {
-                            triggerSwipeAnimation()
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button {
+                        if isSearchPresented {
+                            viewModel.searchText = ""
+                            isSearchPresented = false
+                        } else {
+                            viewModel.isDeleteYearMode = false
+                            isSearchPresented = true
                         }
-                    }) {
-                        Image(systemName: viewModel.isDeleteYearMode ? "checkmark.circle" : "trash")
-                            .foregroundStyle(Color.primary)
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                    }
+
+                    Button {
+                        if isSearchPresented || !viewModel.searchText.isEmpty {
+                            viewModel.searchText = ""
+                            isSearchPresented = false
+                        }
+
+                        withAnimation(.snappy) {
+                            viewModel.isDeleteYearMode.toggle()
+                        }
+                    } label: {
+                        Image(systemName: viewModel.isDeleteYearMode ? "checkmark.circle.fill" : "trash")
                     }
                 }
             }
-            .alert(isPresented: $viewModel.showDeleteAlert) {
-                Alert(
-                    title: Text("Eliminar Facturas Anuales"),
-                    message: Text("¿Está seguro de que desea eliminar todas las facturas del año \(viewModel.yearToDelete ?? "")? Esta acción no se puede deshacer."),
-                    primaryButton: .destructive(Text("Eliminar")) {
-                        if let year = viewModel.yearToDelete {
-                            viewModel.deleteYearInvoices(from: year, invoices: invoices)
-                        }
-                    },
-                    secondaryButton: .cancel()
-                )
+            .onChange(of: viewModel.searchText) { _, newValue in
+                if !newValue.isEmpty {
+                    viewModel.isDeleteYearMode = false
+                }
+            }
+            .alert("Error", isPresented: $viewModel.showErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.errorMessage ?? "Ocurrió un error inesperado.")
+            }
+            .confirmationDialog(
+                viewModel.deleteTarget?.title ?? "Eliminar facturas",
+                isPresented: isShowingDeleteConfirmation,
+                titleVisibility: .visible
+            ) {
+                if let deleteTarget = viewModel.deleteTarget {
+                    Button(deleteTarget.buttonTitle, role: .destructive) {
+                        viewModel.confirmDeletion(from: invoices)
+                    }
+                }
+
+                Button("Cancelar", role: .cancel) {}
+            } message: {
+                Text(viewModel.deleteTarget?.message ?? "Esta acción no se puede deshacer.")
             }
             .sheet(isPresented: $viewModel.showAddBill) {
                 AddInvoiceView()
@@ -149,24 +170,50 @@ struct HomeView: View {
             }
             .onAppear {
                 viewModel.setContext(context)
+                syncExpandedState()
+            }
+            .onChange(of: allYearIDs) { _, _ in
+                syncExpandedState()
+            }
+            .onChange(of: allMonthIDs) { _, _ in
+                syncExpandedState()
             }
         }
     }
 
-    // Trigger animation for swipe action
-    private func triggerSwipeAnimation() {
-        withAnimation {
-            viewModel.isAnimatingSwipe = true
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            withAnimation {
-                viewModel.isAnimatingSwipe = false
+    private func bindingForYear(_ year: String) -> Binding<Bool> {
+        Binding {
+            isSearching || expandedYears.contains(year)
+        } set: { isExpanded in
+            if isExpanded {
+                expandedYears.insert(year)
+            } else {
+                expandedYears.remove(year)
             }
         }
+    }
+
+    private func bindingForMonth(_ monthID: String) -> Binding<Bool> {
+        Binding {
+            isSearching || expandedMonths.contains(monthID)
+        } set: { isExpanded in
+            if isExpanded {
+                expandedMonths.insert(monthID)
+            } else {
+                expandedMonths.remove(monthID)
+            }
+        }
+    }
+
+    private func syncExpandedState() {
+        let currentYearIDs = Set(allYearIDs)
+        expandedYears.formIntersection(currentYearIDs)
+
+        let currentMonthIDs = Set(allMonthIDs)
+        expandedMonths.formIntersection(currentMonthIDs)
     }
 }
 
 #Preview {
     HomeView()
 }
-
