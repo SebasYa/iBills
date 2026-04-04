@@ -7,93 +7,75 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DB140B1E2C7E6AB10020138E /* YearPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB140B1D2C7E6AB10020138E /* YearPickerView.swift */; };
 		DB4B2A5D2C7E54F600530EE7 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B2A5C2C7E54F600530EE7 /* CustomTabBarView.swift */; };
 		DB612D472C613028006D9E8B /* iBillsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D462C613028006D9E8B /* iBillsApp.swift */; };
 		DB612D4B2C61302A006D9E8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB612D4A2C61302A006D9E8B /* Assets.xcassets */; };
 		DB612D4E2C61302A006D9E8B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB612D4D2C61302A006D9E8B /* Preview Assets.xcassets */; };
 		DB612D552C613A36006D9E8B /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D542C613A36006D9E8B /* Invoice.swift */; };
-		DB612D592C615301006D9E8B /* AddInvoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D582C615301006D9E8B /* AddInvoiceView.swift */; };
-		DB612D5B2C615D2C006D9E8B /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D5A2C615D2C006D9E8B /* GraphView.swift */; };
-		DB612D5D2C615DAF006D9E8B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D5C2C615DAF006D9E8B /* HomeView.swift */; };
-		DB612D612C616A6C006D9E8B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB612D602C616A6C006D9E8B /* MainView.swift */; };
 		DB7C9A472CC2F5BE008B3D62 /* CreateInvoiceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7C9A462CC2F5BE008B3D62 /* CreateInvoiceModel.swift */; };
 		DB9A95792C6FD74000FE559F /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95782C6FD74000FE559F /* AuthenticationView.swift */; };
 		DB9A957E2C72809900FE559F /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A957D2C72809900FE559F /* GraphViewModel.swift */; };
 		DB9A95802C73CF6700FE559F /* ChartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A957F2C73CF6700FE559F /* ChartType.swift */; };
-		DB9A95882C77073300FE559F /* GraphTypeButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */; };
-		DB9A958A2C7707C600FE559F /* GraphSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95892C7707C600FE559F /* GraphSectionView.swift */; };
 		DB9A958C2C770AFF00FE559F /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958B2C770AFF00FE559F /* AuthenticationViewModel.swift */; };
 		DB9A958E2C770C7900FE559F /* AddInvoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */; };
-		DB9A95902C79AF7B00FE559F /* BalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A958F2C79AF7B00FE559F /* BalanceView.swift */; };
 		DB9A95922C79AF9300FE559F /* BalanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */; };
 		DB9A95942C7E467A00FE559F /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95932C7E467A00FE559F /* TabModel.swift */; };
 		DB9A95962C7E471100FE559F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A95952C7E471100FE559F /* ContentView.swift */; };
 		DBA266442C7E778700CEAD51 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DBA266432C7E778700CEAD51 /* Launch Screen.storyboard */; };
 		DBA266582C88F14E00CEAD51 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA266572C88F14E00CEAD51 /* HomeViewModel.swift */; };
-		DBB353862F809156006C07F6 /* InvoiceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB353852F809156006C07F6 /* InvoiceRowView.swift */; };
 		DBE1A0112E9A000100000001 /* InvoiceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE1A0212E9A000100000001 /* InvoiceCategory.swift */; };
 		DBE1A0122E9A000100000001 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE1A0222E9A000100000001 /* AuthenticationService.swift */; };
 		DBE1A0132E9A000100000001 /* InvoiceAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE1A0232E9A000100000001 /* InvoiceAnalyticsService.swift */; };
 		DBE1A0142E9A000100000001 /* InvoiceFormService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE1A0242E9A000100000001 /* InvoiceFormService.swift */; };
 		DBE1A0152E9A000100000001 /* InvoiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE1A0252E9A000100000001 /* InvoiceStore.swift */; };
-		DBF1A1012F83000100AA1001 /* HomeContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1112F83000100AA1001 /* HomeContentListView.swift */; };
-		DBF1A1022F83000100AA1001 /* HomeAddInvoiceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1122F83000100AA1001 /* HomeAddInvoiceButton.swift */; };
-		DBF1A1032F83000100AA1001 /* HomeYearSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1132F83000100AA1001 /* HomeYearSectionView.swift */; };
-		DBF1A1042F83000100AA1001 /* HomeMonthSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1142F83000100AA1001 /* HomeMonthSectionView.swift */; };
-		DBF1A1052F83000100AA1001 /* HomeEmptyStateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1152F83000100AA1001 /* HomeEmptyStateCard.swift */; };
-		DBF1A1062F83000100AA1001 /* HomeBalanceSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1162F83000100AA1001 /* HomeBalanceSummaryCard.swift */; };
-		DBF1A1072F83000100AA1001 /* BalanceInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1172F83000100AA1001 /* BalanceInsightsSection.swift */; };
-		DBF1A1082F83000100AA1001 /* BalanceEmptyStateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1182F83000100AA1001 /* BalanceEmptyStateCard.swift */; };
 		DBF1A1092F83000100AA1001 /* PreviewFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A1192F83000100AA1001 /* PreviewFixtures.swift */; };
-		DBF1A10A2F83000100AA1001 /* GraphOverviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A11A2F83000100AA1001 /* GraphOverviewCard.swift */; };
 		DBF1A10B2F83000100AA1001 /* ScrollBottomSpacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1A11B2F83000100AA1001 /* ScrollBottomSpacer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DB140B1D2C7E6AB10020138E /* YearPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearPickerView.swift; sourceTree = "<group>"; };
 		DB4B2A5C2C7E54F600530EE7 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		DB612D432C613028006D9E8B /* iBills.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iBills.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB612D462C613028006D9E8B /* iBillsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iBillsApp.swift; sourceTree = "<group>"; };
 		DB612D4A2C61302A006D9E8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB612D4D2C61302A006D9E8B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DB612D542C613A36006D9E8B /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
-		DB612D582C615301006D9E8B /* AddInvoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInvoiceView.swift; sourceTree = "<group>"; };
-		DB612D5A2C615D2C006D9E8B /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
-		DB612D5C2C615DAF006D9E8B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		DB612D602C616A6C006D9E8B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		DB7C9A462CC2F5BE008B3D62 /* CreateInvoiceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInvoiceModel.swift; sourceTree = "<group>"; };
 		DB9A95782C6FD74000FE559F /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		DB9A957D2C72809900FE559F /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
 		DB9A957F2C73CF6700FE559F /* ChartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartType.swift; sourceTree = "<group>"; };
-		DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTypeButtonsView.swift; sourceTree = "<group>"; };
-		DB9A95892C7707C600FE559F /* GraphSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSectionView.swift; sourceTree = "<group>"; };
 		DB9A958B2C770AFF00FE559F /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		DB9A958D2C770C7900FE559F /* AddInvoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInvoiceViewModel.swift; sourceTree = "<group>"; };
-		DB9A958F2C79AF7B00FE559F /* BalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceView.swift; sourceTree = "<group>"; };
 		DB9A95912C79AF9300FE559F /* BalanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceViewModel.swift; sourceTree = "<group>"; };
 		DB9A95932C7E467A00FE559F /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
 		DB9A95952C7E471100FE559F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		DBA266432C7E778700CEAD51 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		DBA266572C88F14E00CEAD51 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		DBB353852F809156006C07F6 /* InvoiceRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceRowView.swift; sourceTree = "<group>"; };
 		DBE1A0212E9A000100000001 /* InvoiceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceCategory.swift; sourceTree = "<group>"; };
 		DBE1A0222E9A000100000001 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		DBE1A0232E9A000100000001 /* InvoiceAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceAnalyticsService.swift; sourceTree = "<group>"; };
 		DBE1A0242E9A000100000001 /* InvoiceFormService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceFormService.swift; sourceTree = "<group>"; };
 		DBE1A0252E9A000100000001 /* InvoiceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceStore.swift; sourceTree = "<group>"; };
-		DBF1A1112F83000100AA1001 /* HomeContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContentListView.swift; sourceTree = "<group>"; };
-		DBF1A1122F83000100AA1001 /* HomeAddInvoiceButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAddInvoiceButton.swift; sourceTree = "<group>"; };
-		DBF1A1132F83000100AA1001 /* HomeYearSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeYearSectionView.swift; sourceTree = "<group>"; };
-		DBF1A1142F83000100AA1001 /* HomeMonthSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMonthSectionView.swift; sourceTree = "<group>"; };
-		DBF1A1152F83000100AA1001 /* HomeEmptyStateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyStateCard.swift; sourceTree = "<group>"; };
-		DBF1A1162F83000100AA1001 /* HomeBalanceSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBalanceSummaryCard.swift; sourceTree = "<group>"; };
-		DBF1A1172F83000100AA1001 /* BalanceInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceInsightsSection.swift; sourceTree = "<group>"; };
-		DBF1A1182F83000100AA1001 /* BalanceEmptyStateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceEmptyStateCard.swift; sourceTree = "<group>"; };
 		DBF1A1192F83000100AA1001 /* PreviewFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewFixtures.swift; sourceTree = "<group>"; };
-		DBF1A11A2F83000100AA1001 /* GraphOverviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphOverviewCard.swift; sourceTree = "<group>"; };
 		DBF1A11B2F83000100AA1001 /* ScrollBottomSpacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollBottomSpacer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DBB353872F80D9B3006C07F6 /* Home */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Home;
+			sourceTree = "<group>";
+		};
+		DBB353882F80D9BA006C07F6 /* Balance */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Balance;
+			sourceTree = "<group>";
+		};
+		DBB353892F80D9C1006C07F6 /* Graph */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Graph;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DB612D402C613028006D9E8B /* Frameworks */ = {
@@ -160,29 +142,14 @@
 		DB9A957B2C70840D00FE559F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DBB353892F80D9C1006C07F6 /* Graph */,
+				DBB353882F80D9BA006C07F6 /* Balance */,
+				DBB353872F80D9B3006C07F6 /* Home */,
 				DB9A95952C7E471100FE559F /* ContentView.swift */,
-				DB612D602C616A6C006D9E8B /* MainView.swift */,
 				DB9A95782C6FD74000FE559F /* AuthenticationView.swift */,
-				DB612D5C2C615DAF006D9E8B /* HomeView.swift */,
-				DBF1A1172F83000100AA1001 /* BalanceInsightsSection.swift */,
-				DBF1A1182F83000100AA1001 /* BalanceEmptyStateCard.swift */,
-				DBF1A1112F83000100AA1001 /* HomeContentListView.swift */,
-				DBF1A1122F83000100AA1001 /* HomeAddInvoiceButton.swift */,
-				DBF1A1162F83000100AA1001 /* HomeBalanceSummaryCard.swift */,
-				DBF1A1132F83000100AA1001 /* HomeYearSectionView.swift */,
-				DBF1A1142F83000100AA1001 /* HomeMonthSectionView.swift */,
-				DBF1A1152F83000100AA1001 /* HomeEmptyStateCard.swift */,
 				DBF1A1192F83000100AA1001 /* PreviewFixtures.swift */,
 				DBF1A11B2F83000100AA1001 /* ScrollBottomSpacer.swift */,
-				DB9A958F2C79AF7B00FE559F /* BalanceView.swift */,
-				DB612D5A2C615D2C006D9E8B /* GraphView.swift */,
-				DB140B1D2C7E6AB10020138E /* YearPickerView.swift */,
-				DB9A95892C7707C600FE559F /* GraphSectionView.swift */,
-				DBF1A11A2F83000100AA1001 /* GraphOverviewCard.swift */,
-				DB9A95872C77073300FE559F /* GraphTypeButtonsView.swift */,
-				DB612D582C615301006D9E8B /* AddInvoiceView.swift */,
 				DB4B2A5C2C7E54F600530EE7 /* CustomTabBarView.swift */,
-				DBB353852F809156006C07F6 /* InvoiceRowView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -224,6 +191,11 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DBB353872F80D9B3006C07F6 /* Home */,
+				DBB353882F80D9BA006C07F6 /* Balance */,
+				DBB353892F80D9C1006C07F6 /* Graph */,
 			);
 			name = iBills;
 			productName = iBills;
@@ -281,44 +253,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB612D5B2C615D2C006D9E8B /* GraphView.swift in Sources */,
 				DB9A95942C7E467A00FE559F /* TabModel.swift in Sources */,
-				DB612D612C616A6C006D9E8B /* MainView.swift in Sources */,
 				DB9A958C2C770AFF00FE559F /* AuthenticationViewModel.swift in Sources */,
-				DB612D592C615301006D9E8B /* AddInvoiceView.swift in Sources */,
 				DB612D552C613A36006D9E8B /* Invoice.swift in Sources */,
 				DBE1A0112E9A000100000001 /* InvoiceCategory.swift in Sources */,
-				DBB353862F809156006C07F6 /* InvoiceRowView.swift in Sources */,
-				DBF1A1082F83000100AA1001 /* BalanceEmptyStateCard.swift in Sources */,
-				DBF1A1022F83000100AA1001 /* HomeAddInvoiceButton.swift in Sources */,
 				DB9A958E2C770C7900FE559F /* AddInvoiceViewModel.swift in Sources */,
 				DBE1A0152E9A000100000001 /* InvoiceStore.swift in Sources */,
-				DBF1A1062F83000100AA1001 /* HomeBalanceSummaryCard.swift in Sources */,
 				DBF1A1092F83000100AA1001 /* PreviewFixtures.swift in Sources */,
 				DBE1A0132E9A000100000001 /* InvoiceAnalyticsService.swift in Sources */,
 				DB9A957E2C72809900FE559F /* GraphViewModel.swift in Sources */,
-				DBF1A10A2F83000100AA1001 /* GraphOverviewCard.swift in Sources */,
 				DBF1A10B2F83000100AA1001 /* ScrollBottomSpacer.swift in Sources */,
 				DB9A95962C7E471100FE559F /* ContentView.swift in Sources */,
 				DBE1A0122E9A000100000001 /* AuthenticationService.swift in Sources */,
-				DB140B1E2C7E6AB10020138E /* YearPickerView.swift in Sources */,
 				DB4B2A5D2C7E54F600530EE7 /* CustomTabBarView.swift in Sources */,
 				DB9A95792C6FD74000FE559F /* AuthenticationView.swift in Sources */,
 				DB7C9A472CC2F5BE008B3D62 /* CreateInvoiceModel.swift in Sources */,
-				DB9A95882C77073300FE559F /* GraphTypeButtonsView.swift in Sources */,
-				DB9A958A2C7707C600FE559F /* GraphSectionView.swift in Sources */,
-				DBF1A1052F83000100AA1001 /* HomeEmptyStateCard.swift in Sources */,
-				DBF1A1072F83000100AA1001 /* BalanceInsightsSection.swift in Sources */,
 				DB612D472C613028006D9E8B /* iBillsApp.swift in Sources */,
-				DBF1A1032F83000100AA1001 /* HomeYearSectionView.swift in Sources */,
-				DBF1A1012F83000100AA1001 /* HomeContentListView.swift in Sources */,
 				DBA266582C88F14E00CEAD51 /* HomeViewModel.swift in Sources */,
 				DB9A95802C73CF6700FE559F /* ChartType.swift in Sources */,
-				DB612D5D2C615DAF006D9E8B /* HomeView.swift in Sources */,
 				DBE1A0142E9A000100000001 /* InvoiceFormService.swift in Sources */,
-				DBF1A1042F83000100AA1001 /* HomeMonthSectionView.swift in Sources */,
 				DB9A95922C79AF9300FE559F /* BalanceViewModel.swift in Sources */,
-				DB9A95902C79AF7B00FE559F /* BalanceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

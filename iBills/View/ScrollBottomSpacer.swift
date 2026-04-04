@@ -40,7 +40,3 @@ struct ScrollBottomSpacer: View {
             .accessibilityHidden(true)
     }
 }
-
-#Preview {
-    ScrollBottomSpacer()
-}
